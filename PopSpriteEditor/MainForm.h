@@ -57,4 +57,9 @@ namespace PopSpriteEditor {
 #pragma endregion
 	};
 
+	ref class GlobalForms abstract sealed
+	{
+	public:
+		static MainForm^ MainWindow;
+	};
 }

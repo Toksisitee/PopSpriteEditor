@@ -8,7 +8,8 @@ int main(array<System::String^> ^args)
 {
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
-	PopSpriteEditor::MainForm form;
-	Application::Run(%form);
+
+	PopSpriteEditor::GlobalForms::MainWindow = gcnew PopSpriteEditor::MainForm();
+	Application::Run(PopSpriteEditor::GlobalForms::MainWindow);
 	return 0;
 }
