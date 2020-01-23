@@ -10,12 +10,12 @@ namespace PopSpriteEditor {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Summary for MyForm
+	/// Summary for MainForm
 	/// </summary>
-	public ref class MyForm : public System::Windows::Forms::Form
+	public ref class MainForm : public System::Windows::Forms::Form
 	{
 	public:
-		MyForm(void)
+		MainForm(void)
 		{
 			InitializeComponent();
 			//
@@ -27,7 +27,7 @@ namespace PopSpriteEditor {
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		~MyForm()
+		~MainForm()
 		{
 			if (components)
 			{
@@ -49,11 +49,12 @@ namespace PopSpriteEditor {
 		void InitializeComponent(void)
 		{
 			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"MyForm";
+			this->Size = System::Drawing::Size(300, 300);
+			this->Text = L"MainForm";
 			this->Padding = System::Windows::Forms::Padding(0);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 		}
 #pragma endregion
 	};
+
 }
