@@ -1,4 +1,5 @@
 #include "MainForm.h"
+#include "bitmap_image.hpp"
 
 using namespace System;
 using namespace System::Windows::Forms;
