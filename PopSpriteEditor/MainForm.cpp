@@ -21,6 +21,7 @@
 #include "bitmap_image.hpp"
 #include "Utility.h"
 #include "Sprite.h"
+#include <msclr\marshal_cppstd.h>
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -48,4 +49,29 @@ int main(array<System::String^> ^args)
 	PopSpriteEditor::GlobalForms::MainWindow = gcnew PopSpriteEditor::MainForm();
 	Application::Run(PopSpriteEditor::GlobalForms::MainWindow);
 	return 0;
+}
+
+inline System::Void PopSpriteEditor::MainForm::openToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	auto dialog = gcnew OpenFileDialog();
+	dialog->Title = "Open Sprite Bank";
+	dialog->Filter = "Data|*.dat|Sprite|*.spr";
+	dialog->InitialDirectory = Directory::GetCurrentDirectory();
+
+	if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	{
+		msclr::interop::marshal_context context;
+		if (g_Sprite.LoadBank(context.marshal_as<std::string>(dialog->FileName)))
+		{
+			ctrlListSprites->Items->Clear();
+			for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
+			{
+				ListViewItem^ item = gcnew ListViewItem(i.ToString());
+				item->SubItems->Add(g_Sprite.SprBank.Data[i].Sprite.Offset.ToString("X2"));
+				item->SubItems->Add(g_Sprite.SprBank.Data[i].Sprite.Height.ToString());
+				item->SubItems->Add(g_Sprite.SprBank.Data[i].Sprite.Width.ToString());
+				ctrlListSprites->Items->Add(item);
+			}
+		}
+	}
 }

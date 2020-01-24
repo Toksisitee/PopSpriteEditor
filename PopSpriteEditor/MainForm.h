@@ -197,6 +197,7 @@ namespace PopSpriteEditor {
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
 			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->openToolStripMenuItem->Text = L"Open";
+			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::openToolStripMenuItem_Click);
 			// 
 			// createSpriteBankToolStripMenuItem
 			// 
@@ -431,6 +432,7 @@ namespace PopSpriteEditor {
 
 		}
 #pragma endregion
+			private: System::Void openToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed
