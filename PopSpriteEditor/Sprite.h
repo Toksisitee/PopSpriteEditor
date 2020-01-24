@@ -50,6 +50,7 @@ public:
 	bool LoadBank(const std::string& file);
 	void MapSprite(uint16_t index);
 	void SaveSprite(uint16_t index);
+	void DumpMemoryToBank(std::string& path);
 	System::Drawing::Bitmap^ getSpriteBitmapHandle(uint16_t index);
 	void Clear() { delete[] m_pBuffer; SprBank.Data.clear(); }
 

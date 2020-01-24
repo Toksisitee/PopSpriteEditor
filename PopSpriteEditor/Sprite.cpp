@@ -194,3 +194,13 @@ System::Drawing::Bitmap^ CSprite::getSpriteBitmapHandle(uint16_t index)
 
 	return bmp;
 }
+
+void CSprite::DumpMemoryToBank(std::string& path)
+{
+	std::ofstream ofs(path, std::ios::binary | std::ios::trunc);
+	if (ofs.is_open())
+	{
+		ofs.write(m_pBuffer, m_nBufferLength);
+		ofs.close();
+	}
+}

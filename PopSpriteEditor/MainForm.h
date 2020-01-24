@@ -196,7 +196,7 @@ namespace PopSpriteEditor {
 			// openToolStripMenuItem
 			// 
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(170, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::openToolStripMenuItem_Click);
 			// 
@@ -207,19 +207,20 @@ namespace PopSpriteEditor {
 					this->imagesToolStripMenuItem
 			});
 			this->createSpriteBankToolStripMenuItem->Name = L"createSpriteBankToolStripMenuItem";
-			this->createSpriteBankToolStripMenuItem->Size = System::Drawing::Size(170, 22);
+			this->createSpriteBankToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->createSpriteBankToolStripMenuItem->Text = L"Create Sprite Bank";
 			// 
 			// memoryToolStripMenuItem
 			// 
 			this->memoryToolStripMenuItem->Name = L"memoryToolStripMenuItem";
-			this->memoryToolStripMenuItem->Size = System::Drawing::Size(119, 22);
+			this->memoryToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->memoryToolStripMenuItem->Text = L"Memory";
+			this->memoryToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::memoryToolStripMenuItem_Click);
 			// 
 			// imagesToolStripMenuItem
 			// 
 			this->imagesToolStripMenuItem->Name = L"imagesToolStripMenuItem";
-			this->imagesToolStripMenuItem->Size = System::Drawing::Size(119, 22);
+			this->imagesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->imagesToolStripMenuItem->Text = L"Images";
 			// 
 			// aboutToolStripMenuItem
@@ -450,6 +451,7 @@ private: System::Void MainForm_Load(System::Object^  sender, System::EventArgs^ 
 private: System::Void ctrlSpriteSize_ValueChanged(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlButtonSaveSprite_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void debugDataToolStripMenuItem_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
+private: System::Void memoryToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed
