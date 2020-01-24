@@ -130,9 +130,9 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Obje
 	uint32_t b = 0;
 	System::Drawing::Bitmap^ bmp = gcnew System::Drawing::Bitmap(16, 16);
 
-	for (int y = 0; y < 16; y++)
+	for (uint32_t y = 0; y < 16; y++)
 	{
-		for (int x = 0; x < 16; x++)
+		for (uint32_t x = 0; x < 16; x++)
 		{
 			auto clr = System::Drawing::Color::FromArgb(
 				255,
@@ -166,4 +166,9 @@ inline System::Void PopSpriteEditor::MainForm::MainForm_Load(System::Object ^ se
 	ctrlSpriteImg->BackColor = Color::White;
 	ctrlSpriteImg2->BackColor = Color::White;
 	ctrlPaletteImg->BackColor = Color::White;
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlSpriteSize_ValueChanged(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	ctrlSpriteImg2->Invalidate();
 }

@@ -353,6 +353,7 @@ namespace PopSpriteEditor {
 			this->ctrlSpriteSize->Size = System::Drawing::Size(122, 45);
 			this->ctrlSpriteSize->TabIndex = 3;
 			this->ctrlSpriteSize->Value = 1;
+			this->ctrlSpriteSize->ValueChanged += gcnew System::EventHandler(this, &MainForm::ctrlSpriteSize_ValueChanged);
 			// 
 			// ctrlSpriteImg
 			// 
@@ -443,6 +444,7 @@ namespace PopSpriteEditor {
 			private: System::Void ctrlSpriteImg2_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e);
 			private: System::Void ctrlPaletteImg_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e);
 			private: System::Void MainForm_Load(System::Object^  sender, System::EventArgs^  e);
+			private: System::Void ctrlSpriteSize_ValueChanged(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed
