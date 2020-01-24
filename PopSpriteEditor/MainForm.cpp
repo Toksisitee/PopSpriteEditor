@@ -18,10 +18,11 @@
 #include "MainForm.h"
 #define NOMINMAX
 #include <Windows.h>
+#include <msclr\marshal_cppstd.h>
 #include "bitmap_image.hpp"
 #include "Utility.h"
 #include "Sprite.h"
-#include <msclr\marshal_cppstd.h>
+#include "Palette.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -38,8 +39,8 @@ int main(array<System::String^> ^args)
 	freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);
 	printf("PopSpriteEditor\n");
 
-	std::string bankPath = GetCurrentDir() + "HSPR0-0.dat";
-	g_Sprite.LoadBank(bankPath);
+	std::string palettePath = GetCurrentDir() + "pal.dat";
+	Palette::Load(palettePath);
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
@@ -74,4 +75,95 @@ inline System::Void PopSpriteEditor::MainForm::openToolStripMenuItem_Click(Syste
 			}
 		}
 	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChanged(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	if (ctrlListSprites->SelectedItems->Count == 0)
+		return;
+
+	uint16_t selectedIndex = ctrlListSprites->FocusedItem->Index;
+	g_Sprite.MapSprite(selectedIndex);
+
+	ctrlGroupBoxSelect->Text = "Sprite: #" + selectedIndex.ToString();
+	ctrlSpriteImg->Invalidate();
+	ctrlSpriteImg2->Invalidate();
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg_Paint(System::Object ^ sender, System::Windows::Forms::PaintEventArgs ^ e) 
+{
+	if (ctrlListSprites->SelectedItems->Count == 0)
+		return;
+
+	auto bmp = g_Sprite.getSpriteBitmapHandle(ctrlListSprites->FocusedItem->Index);
+	auto g = e->Graphics;
+	g->InterpolationMode = System::Drawing::Drawing2D::InterpolationMode::NearestNeighbor;
+	g->PixelOffsetMode = System::Drawing::Drawing2D::PixelOffsetMode::Half;
+	g->Clear(System::Drawing::Color::White);
+
+	double scaleX = (double)ctrlSpriteImg->Width / (double)bmp->Height;
+	double scaleY = (double)ctrlSpriteImg->Height / (double)bmp->Width;
+	double scaleFactor = scaleX < scaleY ? scaleX : scaleY;
+
+	g->DrawImage(bmp, static_cast<int32_t>((ctrlSpriteImg->Width - (bmp->Width * scaleFactor)) / 2),
+		static_cast<int32_t>((ctrlSpriteImg->Height - (bmp->Height * scaleFactor)) / 2),
+		static_cast<int32_t>(bmp->Width * scaleFactor),
+		static_cast<int32_t>(bmp->Height * scaleFactor));
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_Paint(System::Object ^ sender, System::Windows::Forms::PaintEventArgs ^ e) 
+{
+	if (ctrlListSprites->SelectedItems->Count == 0)
+		return;
+
+	auto bmp = g_Sprite.getSpriteBitmapHandle(ctrlListSprites->FocusedItem->Index);
+	uint8_t scaleFactor = ctrlSpriteSize->Value;
+	ctrlSpriteImg2->Size = System::Drawing::Size(bmp->Width * scaleFactor, bmp->Height * scaleFactor);
+	auto g = e->Graphics;
+	g->InterpolationMode = System::Drawing::Drawing2D::InterpolationMode::NearestNeighbor;
+	g->PixelOffsetMode = System::Drawing::Drawing2D::PixelOffsetMode::Half;
+	g->DrawImage(bmp, 0, 0, bmp->Width * scaleFactor, bmp->Height * scaleFactor);
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Object ^ sender, System::Windows::Forms::PaintEventArgs ^ e) 
+{
+	uint32_t b = 0;
+	System::Drawing::Bitmap^ bmp = gcnew System::Drawing::Bitmap(16, 16);
+
+	for (int y = 0; y < 16; y++)
+	{
+		for (int x = 0; x < 16; x++)
+		{
+			auto clr = System::Drawing::Color::FromArgb(
+				255,
+				g_Palette[b].R,
+				g_Palette[b].G,
+				g_Palette[b].B
+			);
+
+			bmp->SetPixel(x, y, clr);
+			b++;
+		}
+	}
+
+	auto g = e->Graphics;
+	g->InterpolationMode = System::Drawing::Drawing2D::InterpolationMode::NearestNeighbor;
+	g->PixelOffsetMode = System::Drawing::Drawing2D::PixelOffsetMode::Half;
+	g->Clear(System::Drawing::Color::White);
+
+	double scaleX = (double)ctrlPaletteImg->Width / (double)bmp->Height;
+	double scaleY = (double)ctrlPaletteImg->Height / (double)bmp->Width;
+	double scaleFactor = scaleX < scaleY ? scaleX : scaleY;
+
+	g->DrawImage(bmp, static_cast<int32_t>((ctrlPaletteImg->Width - (bmp->Width * scaleFactor)) / 2),
+		static_cast<int32_t>((ctrlPaletteImg->Height - (bmp->Height * scaleFactor)) / 2),
+		static_cast<int32_t>(bmp->Width * scaleFactor),
+		static_cast<int32_t>(bmp->Height * scaleFactor));
+}
+
+inline System::Void PopSpriteEditor::MainForm::MainForm_Load(System::Object ^ sender, System::EventArgs ^ e)
+{
+	ctrlSpriteImg->BackColor = Color::White;
+	ctrlSpriteImg2->BackColor = Color::White;
+	ctrlPaletteImg->BackColor = Color::White;
 }

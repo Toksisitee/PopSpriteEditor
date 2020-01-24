@@ -68,7 +68,7 @@ bool CSprite::LoadBank(const std::string& file)
 			SprBank.Data.push_back({ *(reinterpret_cast<CSprite::TbSprite*>(buffer)) });
 			SprBank.Data.back().Data = reinterpret_cast<int8_t*>(m_pBuffer + SprBank.Data.back().Sprite.Offset);
 			buffer += sizeof(CSprite::TbSprite);
-#if 1
+#if 0
 			printf("#%i Height: %i, Width: %i, Offsets: (H)%06X && (D)%06X\n", i, SprBank.Data.back().Sprite.Height, SprBank.Data.back().Sprite.Width, ((1 + i) * sizeof(CSprite::BankHeader)), SprBank.Data.back().Sprite.Offset);
 #endif
 		}
@@ -157,4 +157,40 @@ void CSprite::SaveSprite(uint16_t index)
 	}
 
 	bmp.save_image(GetCurrentDir() + "//output//" + std::to_string(index) + ".bmp");
+}
+
+System::Drawing::Bitmap^ CSprite::getSpriteBitmapHandle(uint16_t index)
+{
+	uint8_t pal_idx;
+	auto sprh = SprBank.Data[index].Sprite.Height;
+	auto sprw = SprBank.Data[index].Sprite.Width;
+
+	// Some sprites found inside the bank are corrupt.
+	if (sprh == 0 && sprw == 0)
+		return gcnew System::Drawing::Bitmap(1, 1);
+
+	auto bmp = gcnew System::Drawing::Bitmap(sprw, sprh);
+	MapSprite(index);
+
+	for (uint8_t x = 0; x < sprw; x++)
+	{
+		for (uint8_t y = 0; y < sprh; y++)
+		{
+			pal_idx = SprBank.Data[index].Map[x][y];
+
+			if (pal_idx == 0)
+				pal_idx = 255;
+
+			auto clr = System::Drawing::Color::FromArgb(
+				255,
+				g_Palette[pal_idx].R,
+				g_Palette[pal_idx].G,
+				g_Palette[pal_idx].B
+			);
+
+			bmp->SetPixel(x, y, clr);
+		}
+	}
+
+	return bmp;
 }
