@@ -11,6 +11,8 @@ namespace Palette
 {
 	extern void Save(RGB* Palette);
 	extern void Load(std::string& file);
+	extern uint8_t FindClosestColor(RGB rgb);
+	extern uint8_t FindColor(RGB rgb);
 }
 
 extern RGB g_Palette[256];

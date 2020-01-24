@@ -43,3 +43,40 @@ void Palette::Load(std::string& file)
 
 	ifs.close();
 }
+
+uint8_t Palette::FindClosestColor(RGB rgb)
+{
+	uint8_t index = 255;
+	double closestDist = DBL_MAX;
+
+	for (int i = 128; i < 256; i++)
+	{
+		auto deltaE = sqrt(
+			pow(rgb.R - g_Palette[i].R, 2) +
+			pow(rgb.G - g_Palette[i].G, 2) +
+			pow(rgb.B - g_Palette[i].B, 2));
+
+		if (deltaE < closestDist)
+		{
+			index = i;
+			closestDist = deltaE;
+		}
+	}
+
+	return index;
+}
+
+uint8_t Palette::FindColor(RGB rgb)
+{
+	for (int i = 128; i < 256; i++)
+	{
+		if (rgb.R == g_Palette[i].R &&
+			rgb.G == g_Palette[i].G &&
+			rgb.B == g_Palette[i].B)
+		{
+			return (i);
+		}
+	}
+
+	return 255;
+}
