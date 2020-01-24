@@ -336,6 +336,7 @@ namespace PopSpriteEditor {
 			this->ctrlButtonSaveSprite->TabIndex = 5;
 			this->ctrlButtonSaveSprite->Text = L"Save Sprite";
 			this->ctrlButtonSaveSprite->UseVisualStyleBackColor = true;
+			this->ctrlButtonSaveSprite->Click += gcnew System::EventHandler(this, &MainForm::ctrlButtonSaveSprite_Click);
 			// 
 			// ctrlNumericGoto
 			// 
@@ -445,6 +446,7 @@ namespace PopSpriteEditor {
 			private: System::Void ctrlPaletteImg_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e);
 			private: System::Void MainForm_Load(System::Object^  sender, System::EventArgs^  e);
 			private: System::Void ctrlSpriteSize_ValueChanged(System::Object^  sender, System::EventArgs^  e);
+			private: System::Void ctrlButtonSaveSprite_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed

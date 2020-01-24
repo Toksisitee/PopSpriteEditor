@@ -172,3 +172,12 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteSize_ValueChanged(Syste
 {
 	ctrlSpriteImg2->Invalidate();
 }
+
+inline System::Void PopSpriteEditor::MainForm::ctrlButtonSaveSprite_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	if (ctrlListSprites->SelectedItems->Count == 0)
+		return;
+
+	uint16_t selectedIndex = ctrlListSprites->FocusedItem->Index;
+	g_Sprite.SaveSprite(selectedIndex);
+}
