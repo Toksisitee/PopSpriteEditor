@@ -76,6 +76,7 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::GroupBox^  groupBox2;
 	private: System::Windows::Forms::PictureBox^  ctrlPaletteImg;
 	private: System::Windows::Forms::Label^  label2;
+	private: System::Windows::Forms::ToolStripMenuItem^  dumpSpritesToolStripMenuItem;
 
 
 
@@ -104,6 +105,7 @@ namespace PopSpriteEditor {
 			this->createSpriteBankToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->memoryToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->imagesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->dumpSpritesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->debugDataToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -185,9 +187,9 @@ namespace PopSpriteEditor {
 			// 
 			// fileToolStripMenuItem
 			// 
-			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
 				this->openToolStripMenuItem,
-					this->createSpriteBankToolStripMenuItem
+					this->createSpriteBankToolStripMenuItem, this->dumpSpritesToolStripMenuItem
 			});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
@@ -222,6 +224,14 @@ namespace PopSpriteEditor {
 			this->imagesToolStripMenuItem->Name = L"imagesToolStripMenuItem";
 			this->imagesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->imagesToolStripMenuItem->Text = L"Images";
+			this->imagesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::imagesToolStripMenuItem_Click);
+			// 
+			// dumpSpritesToolStripMenuItem
+			// 
+			this->dumpSpritesToolStripMenuItem->Name = L"dumpSpritesToolStripMenuItem";
+			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->dumpSpritesToolStripMenuItem->Text = L"Dump Sprites";
+			this->dumpSpritesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::dumpSpritesToolStripMenuItem_Click);
 			// 
 			// aboutToolStripMenuItem
 			// 
@@ -234,7 +244,7 @@ namespace PopSpriteEditor {
 			// 
 			this->debugDataToolStripMenuItem->CheckOnClick = true;
 			this->debugDataToolStripMenuItem->Name = L"debugDataToolStripMenuItem";
-			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(168, 22);
 			this->debugDataToolStripMenuItem->Text = L"Show Debug Data";
 			this->debugDataToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::debugDataToolStripMenuItem_CheckedChanged);
 			// 
@@ -452,6 +462,8 @@ private: System::Void ctrlSpriteSize_ValueChanged(System::Object^  sender, Syste
 private: System::Void ctrlButtonSaveSprite_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void debugDataToolStripMenuItem_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 private: System::Void memoryToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void dumpSpritesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void imagesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed

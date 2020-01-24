@@ -254,3 +254,25 @@ inline System::Void PopSpriteEditor::MainForm::memoryToolStripMenuItem_Click(Sys
 		g_Sprite.DumpMemoryToBank(context.marshal_as<std::string>((dialog->FileName)));
 	}
 }
+
+inline System::Void PopSpriteEditor::MainForm::dumpSpritesToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
+	{
+		g_Sprite.SaveSprite(i);
+	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::imagesToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	auto dialog = gcnew SaveFileDialog();
+	dialog->Title = "Save Sprite Bank";
+	dialog->Filter = "Data|*.dat|Sprite|*.spr";
+
+	if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK &&
+		dialog->FileName != "")
+	{
+		msclr::interop::marshal_context context;
+		g_Sprite.ImportToBank(context.marshal_as<std::string>((dialog->FileName)));
+	}
+}
