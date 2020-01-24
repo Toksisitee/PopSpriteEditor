@@ -1,10 +1,23 @@
 #pragma once
 
+#define RPAL	(0)
+#define RREAD	(1)
+#define RSKIP	(2)
+#define REND	(3)
+
 class CSprite
 {
 public:
 	CSprite() {};
 	~CSprite() {};
+
+	typedef std::vector<std::vector<int32_t>> MAP;
+
+	struct RAW
+	{
+		uint8_t	Data;
+		int8_t  Type;
+	};
 
 	struct TbSprite
 	{
@@ -15,8 +28,10 @@ public:
 
 	struct DATA
 	{
-		TbSprite	Sprite;
-		int8_t*		Data;
+		TbSprite			Sprite;
+		int8_t*				Data;
+		std::vector<RAW>	Raw;
+		MAP					Map;
 	};
 
 	struct BankHeader
@@ -33,6 +48,8 @@ public:
 
 	Bank SprBank;
 	bool LoadBank(const std::string& file);
+	void MapSprite(uint16_t index);
+	void SaveSprite(uint16_t index);
 	void Clear() { delete[] m_pBuffer; SprBank.Data.clear(); }
 
 private:
