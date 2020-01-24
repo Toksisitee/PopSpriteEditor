@@ -233,8 +233,9 @@ namespace PopSpriteEditor {
 			// 
 			this->debugDataToolStripMenuItem->CheckOnClick = true;
 			this->debugDataToolStripMenuItem->Name = L"debugDataToolStripMenuItem";
-			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(168, 22);
+			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->debugDataToolStripMenuItem->Text = L"Show Debug Data";
+			this->debugDataToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::debugDataToolStripMenuItem_CheckedChanged);
 			// 
 			// aboutToolStripMenuItem1
 			// 
@@ -439,14 +440,16 @@ namespace PopSpriteEditor {
 
 		}
 #pragma endregion
-			private: System::Void openToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
-			private: System::Void ctrlListSprites_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e);
-			private: System::Void ctrlSpriteImg_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e);
-			private: System::Void ctrlSpriteImg2_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e);
-			private: System::Void ctrlPaletteImg_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e);
-			private: System::Void MainForm_Load(System::Object^  sender, System::EventArgs^  e);
-			private: System::Void ctrlSpriteSize_ValueChanged(System::Object^  sender, System::EventArgs^  e);
-			private: System::Void ctrlButtonSaveSprite_Click(System::Object^  sender, System::EventArgs^  e);
+
+private: System::Void openToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void ctrlListSprites_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e);
+private: System::Void ctrlSpriteImg_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e);
+private: System::Void ctrlSpriteImg2_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e);
+private: System::Void ctrlPaletteImg_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e);
+private: System::Void MainForm_Load(System::Object^  sender, System::EventArgs^  e);
+private: System::Void ctrlSpriteSize_ValueChanged(System::Object^  sender, System::EventArgs^  e);
+private: System::Void ctrlButtonSaveSprite_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void debugDataToolStripMenuItem_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed

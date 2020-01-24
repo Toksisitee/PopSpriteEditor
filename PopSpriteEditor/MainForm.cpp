@@ -77,6 +77,17 @@ inline System::Void PopSpriteEditor::MainForm::openToolStripMenuItem_Click(Syste
 	}
 }
 
+void HexEditorAppend(System::String^ text, System::Drawing::Color color)
+{
+	auto editor = PopSpriteEditor::GlobalForms::MainWindow->ctrlHexView;
+	editor->SelectionStart = editor->TextLength;
+	editor->SelectionLength = 0;
+	editor->SelectionColor = color;
+	editor->AppendText(text);
+	editor->SelectionColor = editor->ForeColor;
+	editor->MaxLength = editor->TextLength;
+}
+
 inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChanged(System::Object ^ sender, System::EventArgs ^ e) 
 {
 	if (ctrlListSprites->SelectedItems->Count == 0)
@@ -88,6 +99,34 @@ inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChan
 	ctrlGroupBoxSelect->Text = "Sprite: #" + selectedIndex.ToString();
 	ctrlSpriteImg->Invalidate();
 	ctrlSpriteImg2->Invalidate();
+
+	if (debugDataToolStripMenuItem->Checked)
+	{
+		System::String^ hexByte;
+
+		ctrlHexView->Clear();
+		ctrlSpriteDataLength->Text = "Memory Data. Length: " + g_Sprite.SprBank.Data[selectedIndex].Raw.size().ToString();
+		for (auto const& byte : g_Sprite.SprBank.Data[selectedIndex].Raw)
+		{
+			hexByte = byte.Data.ToString("X2") + " ";
+
+			switch (byte.Type)
+			{
+			case RPAL:
+				HexEditorAppend(hexByte, Color::Black);
+				break;
+			case RREAD:
+				HexEditorAppend(hexByte, Color::ForestGreen);
+				break;
+			case RSKIP:
+				HexEditorAppend(hexByte, Color::DarkRed);
+				break;
+			case REND:
+				HexEditorAppend(hexByte, Color::DarkSlateBlue);
+				break;
+			}
+		}
+	}
 }
 
 inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg_Paint(System::Object ^ sender, System::Windows::Forms::PaintEventArgs ^ e) 
@@ -166,6 +205,7 @@ inline System::Void PopSpriteEditor::MainForm::MainForm_Load(System::Object ^ se
 	ctrlSpriteImg->BackColor = Color::White;
 	ctrlSpriteImg2->BackColor = Color::White;
 	ctrlPaletteImg->BackColor = Color::White;
+	debugDataToolStripMenuItem_CheckedChanged(nullptr, nullptr);
 }
 
 inline System::Void PopSpriteEditor::MainForm::ctrlSpriteSize_ValueChanged(System::Object ^ sender, System::EventArgs ^ e) 
@@ -180,4 +220,23 @@ inline System::Void PopSpriteEditor::MainForm::ctrlButtonSaveSprite_Click(System
 
 	uint16_t selectedIndex = ctrlListSprites->FocusedItem->Index;
 	g_Sprite.SaveSprite(selectedIndex);
+}
+
+inline System::Void PopSpriteEditor::MainForm::debugDataToolStripMenuItem_CheckedChanged(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	bool status = debugDataToolStripMenuItem->Checked ? true : false;
+
+	ctrlHexBMPView->Enabled = status;
+	ctrlHexView->Enabled = status;
+	ctrlSpriteDataBMPLength->Visible = status;
+	ctrlSpriteDataLength->Visible = status;
+	ctrlSpriteDataMatching->Visible = status;
+	ctrlHexBMPView->Visible = status;
+	ctrlHexView->Visible = status;
+
+	if (!status)
+	{
+		ctrlHexBMPView->Clear();
+		ctrlHexView->Clear();
+	}
 }
