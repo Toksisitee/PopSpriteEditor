@@ -18,10 +18,11 @@
 #include <vector>
 #include <cstdint>
 #include <fstream>
-#include "Sprite.h"
 #include "Utility.h"
 #include "bitmap_image.hpp"
 #include "Palette.h"
+#include <filesystem>
+#include "Sprite.h"
 
 bool CSprite::LoadBank(const std::string& file)
 {
@@ -135,8 +136,6 @@ void CSprite::MapSprite(uint16_t index)
 
 void CSprite::SaveSprite(uint16_t index)
 {
-	printf("Saving Sprite: %i\n", index);
-
 	uint8_t pal_idx;
 	bitmap_image bmp(SprBank.Data[index].Sprite.Width, SprBank.Data[index].Sprite.Height);
 	bmp.clear();
@@ -201,6 +200,180 @@ void CSprite::DumpMemoryToBank(std::string& path)
 	if (ofs.is_open())
 	{
 		ofs.write(m_pBuffer, m_nBufferLength);
+		ofs.close();
+	}
+}
+
+void CSprite::ConvertBitmapToData(bitmap_image sprbmp, std::vector<uint8_t>& vec)
+{
+	uint8_t bs
+		, br;
+	uint16_t sprw
+		, sprh
+		, px
+		, br_idx;
+	rgb_t rgb_t;
+	std::vector<uint8_t> pal;
+	bool bClrs = false;
+
+	sprw = sprbmp.width();
+	sprh = sprbmp.height();
+
+	for (uint32_t y = 0; y < sprh; y++)
+	{
+		for (uint32_t x = 0; x < sprw; x++)
+		{
+			sprbmp.get_pixel(x, y, rgb_t);
+			auto idx = Palette::FindColor({ rgb_t.red, rgb_t.green, rgb_t.blue });
+			pal.push_back(idx);
+		}
+	}
+
+	for (const auto& idx : pal)
+	{
+		if (idx == 255)
+		{
+			bs++;
+
+			if (bClrs)
+			{
+				bClrs = false;
+				vec[br_idx - 1] = br;
+				br = 0;
+			}
+		}
+		else
+		{
+			if (bs)
+			{
+				vec.push_back((-bs));
+				bs = 0;
+			}
+
+			br++;
+
+			if (!bClrs)
+			{
+				bClrs = true;
+				vec.push_back(br);
+				br_idx = vec.size();
+			}
+
+			vec.push_back(idx);
+		}
+
+		px++;
+
+		if (px == sprw)
+		{
+			vec.push_back(0);
+			px = 0;
+			bs = 0;
+
+			if (bClrs)
+			{
+				bClrs = false;
+				vec[br_idx - 1] = br;
+				br = 0;
+			}
+		}
+	}
+}
+
+// Create bank by importing BMP images from the output directory.
+void CSprite::ImportToBank(std::string& path)
+{
+	uint16_t sprw
+		, sprh;
+	uint32_t sprf = 0
+		, spro = 0;
+	std::vector<std::pair<uint32_t, bitmap_image>> spri;
+	std::vector<uint8_t> conv, pal;
+	std::vector<std::vector<uint8_t>> data;
+	char szMagic[4] = { 0x50, 0x53, 0x46, 0x42 };
+
+	for (const auto & entry : std::filesystem::directory_iterator((GetCurrentDir() + "output")))
+	{
+		if (!(entry.is_directory()) && (entry.path().extension() == ".bmp"))
+		{
+			std::string filename = entry.path().filename().string();
+			std::string tmp = filename.substr(0, filename.find(".", 0));
+
+			if (std::all_of(tmp.begin(), tmp.end(), isdigit))
+			{
+				uint32_t idx = std::stoi(tmp);
+				bitmap_image bmp(entry.path().string());
+
+				if (!bmp)
+				{
+					if (idx != 71 && idx != 167 && idx != 2130 && idx != 4484 &&
+						idx != 5182 && idx != 5184 && idx != 5186 && idx != 5188 &&
+						idx != 5190 && idx != 5192 && idx != 5767 && idx != 6320 &&
+						idx != 6876 && idx != 6878)
+					{
+						printf("Failed to open: %s\n", tmp.c_str());
+						return;
+					}
+					else
+					{
+						bmp.setwidth_height(0, 0);
+					}
+				}
+
+				spri.push_back(std::make_pair(idx, bmp));
+				sprf++;
+			}
+		}
+	}
+
+	std::sort(spri.begin(), spri.end(), [](
+		const std::pair<uint32_t, bitmap_image>& fspr, const std::pair<uint32_t, bitmap_image>& sspr)
+	{
+		return (fspr.first < sspr.first);
+	});
+
+	auto it = std::unique(spri.begin(), spri.end(), [](
+		const std::pair<uint32_t, bitmap_image>& fspr, const std::pair<uint32_t, bitmap_image>& sspr)
+	{
+		return fspr.first == sspr.first;
+	});
+
+	spri.erase(it, spri.end());
+
+	printf("Imported %i sprites\n", spri.size());
+
+	spro = sizeof(CSprite::BankHeader) + (sizeof(CSprite::TbSprite) * sprf);
+	printf("Offset starting at %#04X\n", spro);
+
+	std::ofstream ofs(path, std::ios::binary | std::ios::trunc);
+	if (ofs.is_open())
+	{
+		ofs.write(reinterpret_cast<const char*>(&szMagic), sizeof(char) * 4);
+		ofs.write(reinterpret_cast<const char*>(&sprf), sizeof(uint32_t));
+
+		for (uint32_t i = 0; i < sprf; i++)
+		{
+			sprw = spri[i].second.width();
+			sprh = spri[i].second.height();
+			ConvertBitmapToData(spri[i].second, conv);
+
+			ofs.write(reinterpret_cast<const char*>(&sprw), sizeof(uint16_t));
+			ofs.write(reinterpret_cast<const char*>(&sprh), sizeof(uint16_t));
+			ofs.write(reinterpret_cast<const char*>(&spro), sizeof(uint32_t));
+
+			spro = spro + conv.size();
+			data.push_back(conv);
+			conv.clear();
+		}
+
+		for (uint32_t i = 0; i < sprf; i++)
+		{
+			for (const auto& b : data[i])
+			{
+				ofs.write(reinterpret_cast<const char*>(&b), sizeof(uint8_t));
+			}
+		}
+
 		ofs.close();
 	}
 }
