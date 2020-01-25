@@ -435,12 +435,12 @@ namespace PopSpriteEditor {
 			// 
 			this->ctrlListSpritesContext->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->CopyOffset });
 			this->ctrlListSpritesContext->Name = L"ctrlListSpritesContext";
-			this->ctrlListSpritesContext->Size = System::Drawing::Size(181, 48);
+			this->ctrlListSpritesContext->Size = System::Drawing::Size(138, 26);
 			// 
 			// CopyOffset
 			// 
 			this->CopyOffset->Name = L"CopyOffset";
-			this->CopyOffset->Size = System::Drawing::Size(180, 22);
+			this->CopyOffset->Size = System::Drawing::Size(137, 22);
 			this->CopyOffset->Text = L"Copy Offset";
 			this->CopyOffset->Click += gcnew System::EventHandler(this, &MainForm::CopyOffset_Click);
 			// 
@@ -455,6 +455,7 @@ namespace PopSpriteEditor {
 			this->Controls->Add(this->menuStrip1);
 			this->Controls->Add(this->ctrlListSprites);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+			this->MinimumSize = System::Drawing::Size(911, 39);
 			this->Name = L"MainForm";
 			this->Text = L"PopSpriteEditor";
 			this->Load += gcnew System::EventHandler(this, &MainForm::MainForm_Load);

@@ -83,7 +83,7 @@ uint8_t Palette::FindClosestColor(RGB rgb)
 	return index;
 }
 
-uint8_t Palette::FindColor(RGB rgb)
+uint8_t Palette::FindColor(RGB rgb, bool closest)
 {
 	for (int i = 128; i < 256; i++)
 	{
@@ -94,6 +94,10 @@ uint8_t Palette::FindColor(RGB rgb)
 			return (i);
 		}
 	}
+
+	// Just a fallback
+	if (closest)
+		return Palette::FindClosestColor(rgb);
 
 	return 255;
 }

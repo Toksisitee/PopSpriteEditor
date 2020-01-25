@@ -224,7 +224,7 @@ void CSprite::ConvertBitmapToData(bitmap_image sprbmp, std::vector<uint8_t>& vec
 		for (uint32_t x = 0; x < sprw; x++)
 		{
 			sprbmp.get_pixel(x, y, rgb_t);
-			auto idx = Palette::FindColor({ rgb_t.red, rgb_t.green, rgb_t.blue });
+			auto idx = Palette::FindColor({ rgb_t.red, rgb_t.green, rgb_t.blue }, true);
 			pal.push_back(idx);
 		}
 	}
