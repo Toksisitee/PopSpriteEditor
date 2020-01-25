@@ -206,11 +206,11 @@ void CSprite::DumpMemoryToBank(std::string& path)
 
 void CSprite::ConvertBitmapToData(bitmap_image sprbmp, std::vector<uint8_t>& vec)
 {
-	uint8_t bs
-		, br;
+	uint8_t bs = 0
+		, br = 0;
 	uint16_t sprw
 		, sprh
-		, px
+		, px = 0
 		, br_idx;
 	rgb_t rgb_t;
 	std::vector<uint8_t> pal;
