@@ -103,6 +103,17 @@ inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChan
 	if (debugDataToolStripMenuItem->Checked)
 	{
 		System::String^ hexByte;
+		std::vector<uint8_t> bmpData;
+
+		g_Sprite.ConvertBitmapToData(GetCurrentDir() + "output\\" + std::to_string(selectedIndex) + ".bmp", bmpData);
+		ctrlHexBMPView->Clear();
+		ctrlSpriteDataBMPLength->Text = "BMP Data (conversion). Length: " + bmpData.size();
+		for (auto const& byte : bmpData)
+		{
+			hexByte = static_cast<int8_t>(byte).ToString("X2") + " ";
+			ctrlHexBMPView->AppendText(hexByte);
+			ctrlHexBMPView->MaxLength = ctrlHexBMPView->TextLength;
+		}
 
 		ctrlHexView->Clear();
 		ctrlSpriteDataLength->Text = "Memory Data. Length: " + g_Sprite.SprBank.Data[selectedIndex].Raw.size().ToString();
@@ -126,6 +137,8 @@ inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChan
 				break;
 			}
 		}
+
+		ctrlSpriteDataMatching->ForeColor = ctrlHexBMPView->Text == ctrlHexView->Text ? Color::DarkGreen : Color::DarkRed;
 	}
 }
 
