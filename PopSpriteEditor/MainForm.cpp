@@ -289,3 +289,22 @@ inline System::Void PopSpriteEditor::MainForm::imagesToolStripMenuItem_Click(Sys
 		g_Sprite.ImportToBank(context.marshal_as<std::string>((dialog->FileName)));
 	}
 }
+
+inline System::Void PopSpriteEditor::MainForm::ctrlNumericGoto_KeyDown(System::Object ^ sender, System::Windows::Forms::KeyEventArgs ^ e) 
+{
+	if (e->KeyCode == Keys::Enter)
+	{
+		uint16_t spriteIndex = static_cast<uint16_t>(ctrlNumericGoto->Value);
+		if (!(ctrlListSprites->Items->Count >= spriteIndex))
+		{
+			spriteIndex = ctrlListSprites->Items->Count - 1;
+			ctrlNumericGoto->Value = spriteIndex;
+		}
+
+		ctrlListSprites->FocusedItem = ctrlListSprites->Items[spriteIndex];
+		ctrlListSprites->Items[spriteIndex]->Selected = true;
+		ctrlListSprites->SelectedItems[0]->Selected = true;
+		ctrlListSprites->Select();
+		ctrlListSprites->EnsureVisible(spriteIndex);
+	}
+}
