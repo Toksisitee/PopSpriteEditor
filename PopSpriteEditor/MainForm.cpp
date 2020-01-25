@@ -318,3 +318,23 @@ inline System::Void PopSpriteEditor::MainForm::aboutToolStripMenuItem1_Click(Sys
 		PopSpriteEditor::GlobalForms::AboutWindow->Show();
 	}
 }
+
+inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_MouseClick(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 
+{
+	if (e->Button == System::Windows::Forms::MouseButtons::Right)
+	{
+		if (ctrlListSprites->FocusedItem->Bounds.Contains(e->Location))
+		{
+			ctrlListSpritesContext->Show(Cursor->Position);
+		}
+	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::CopyOffset_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	if (ctrlListSprites->SelectedItems->Count == 0)
+		return;
+
+	uint16_t selectedIndex = ctrlListSprites->FocusedItem->Index;
+	System::Windows::Forms::Clipboard::SetText(g_Sprite.SprBank.Data[selectedIndex].Sprite.Offset.ToString("X2"));
+}

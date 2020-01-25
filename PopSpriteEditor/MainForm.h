@@ -77,6 +77,9 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::PictureBox^  ctrlPaletteImg;
 	private: System::Windows::Forms::Label^  label2;
 	private: System::Windows::Forms::ToolStripMenuItem^  dumpSpritesToolStripMenuItem;
+	private: System::Windows::Forms::ContextMenuStrip^  ctrlListSpritesContext;
+	private: System::Windows::Forms::ToolStripMenuItem^  CopyOffset;
+	private: System::ComponentModel::IContainer^  components;
 
 
 
@@ -84,7 +87,7 @@ namespace PopSpriteEditor {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -93,6 +96,7 @@ namespace PopSpriteEditor {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MainForm::typeid));
 			this->ctrlListSprites = (gcnew System::Windows::Forms::ListView());
 			this->HIndex = (gcnew System::Windows::Forms::ColumnHeader());
@@ -124,6 +128,8 @@ namespace PopSpriteEditor {
 			this->ctrlSpriteImg2 = (gcnew System::Windows::Forms::PictureBox());
 			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
 			this->ctrlPaletteImg = (gcnew System::Windows::Forms::PictureBox());
+			this->ctrlListSpritesContext = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->CopyOffset = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->ctrlGroupBoxSelect->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlNumericGoto))->BeginInit();
@@ -133,6 +139,7 @@ namespace PopSpriteEditor {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlSpriteImg2))->BeginInit();
 			this->groupBox2->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlPaletteImg))->BeginInit();
+			this->ctrlListSpritesContext->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// ctrlListSprites
@@ -153,6 +160,7 @@ namespace PopSpriteEditor {
 			this->ctrlListSprites->UseCompatibleStateImageBehavior = false;
 			this->ctrlListSprites->View = System::Windows::Forms::View::Details;
 			this->ctrlListSprites->SelectedIndexChanged += gcnew System::EventHandler(this, &MainForm::ctrlListSprites_SelectedIndexChanged);
+			this->ctrlListSprites->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::ctrlListSprites_MouseClick);
 			// 
 			// HIndex
 			// 
@@ -198,7 +206,7 @@ namespace PopSpriteEditor {
 			// openToolStripMenuItem
 			// 
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(170, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::openToolStripMenuItem_Click);
 			// 
@@ -209,27 +217,27 @@ namespace PopSpriteEditor {
 					this->imagesToolStripMenuItem
 			});
 			this->createSpriteBankToolStripMenuItem->Name = L"createSpriteBankToolStripMenuItem";
-			this->createSpriteBankToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->createSpriteBankToolStripMenuItem->Size = System::Drawing::Size(170, 22);
 			this->createSpriteBankToolStripMenuItem->Text = L"Create Sprite Bank";
 			// 
 			// memoryToolStripMenuItem
 			// 
 			this->memoryToolStripMenuItem->Name = L"memoryToolStripMenuItem";
-			this->memoryToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->memoryToolStripMenuItem->Size = System::Drawing::Size(150, 22);
 			this->memoryToolStripMenuItem->Text = L"From Memory";
 			this->memoryToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::memoryToolStripMenuItem_Click);
 			// 
 			// imagesToolStripMenuItem
 			// 
 			this->imagesToolStripMenuItem->Name = L"imagesToolStripMenuItem";
-			this->imagesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->imagesToolStripMenuItem->Size = System::Drawing::Size(150, 22);
 			this->imagesToolStripMenuItem->Text = L"From Images";
 			this->imagesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::imagesToolStripMenuItem_Click);
 			// 
 			// dumpSpritesToolStripMenuItem
 			// 
 			this->dumpSpritesToolStripMenuItem->Name = L"dumpSpritesToolStripMenuItem";
-			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(170, 22);
 			this->dumpSpritesToolStripMenuItem->Text = L"Export Sprites";
 			this->dumpSpritesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::dumpSpritesToolStripMenuItem_Click);
 			// 
@@ -244,7 +252,7 @@ namespace PopSpriteEditor {
 			// 
 			this->debugDataToolStripMenuItem->CheckOnClick = true;
 			this->debugDataToolStripMenuItem->Name = L"debugDataToolStripMenuItem";
-			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(168, 22);
 			this->debugDataToolStripMenuItem->Text = L"Show Debug Data";
 			this->debugDataToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::debugDataToolStripMenuItem_CheckedChanged);
 			// 
@@ -423,6 +431,19 @@ namespace PopSpriteEditor {
 			this->ctrlPaletteImg->TabStop = false;
 			this->ctrlPaletteImg->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::ctrlPaletteImg_Paint);
 			// 
+			// ctrlListSpritesContext
+			// 
+			this->ctrlListSpritesContext->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->CopyOffset });
+			this->ctrlListSpritesContext->Name = L"ctrlListSpritesContext";
+			this->ctrlListSpritesContext->Size = System::Drawing::Size(181, 48);
+			// 
+			// CopyOffset
+			// 
+			this->CopyOffset->Name = L"CopyOffset";
+			this->CopyOffset->Size = System::Drawing::Size(180, 22);
+			this->CopyOffset->Text = L"Copy Offset";
+			this->CopyOffset->Click += gcnew System::EventHandler(this, &MainForm::CopyOffset_Click);
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -448,6 +469,7 @@ namespace PopSpriteEditor {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlSpriteImg2))->EndInit();
 			this->groupBox2->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlPaletteImg))->EndInit();
+			this->ctrlListSpritesContext->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -468,6 +490,8 @@ private: System::Void dumpSpritesToolStripMenuItem_Click(System::Object^  sender
 private: System::Void imagesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlNumericGoto_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 private: System::Void aboutToolStripMenuItem1_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void ctrlListSprites_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+private: System::Void CopyOffset_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed
