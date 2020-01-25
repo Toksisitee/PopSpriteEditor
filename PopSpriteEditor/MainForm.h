@@ -198,7 +198,7 @@ namespace PopSpriteEditor {
 			// openToolStripMenuItem
 			// 
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(170, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::openToolStripMenuItem_Click);
 			// 
@@ -209,28 +209,28 @@ namespace PopSpriteEditor {
 					this->imagesToolStripMenuItem
 			});
 			this->createSpriteBankToolStripMenuItem->Name = L"createSpriteBankToolStripMenuItem";
-			this->createSpriteBankToolStripMenuItem->Size = System::Drawing::Size(170, 22);
+			this->createSpriteBankToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->createSpriteBankToolStripMenuItem->Text = L"Create Sprite Bank";
 			// 
 			// memoryToolStripMenuItem
 			// 
 			this->memoryToolStripMenuItem->Name = L"memoryToolStripMenuItem";
-			this->memoryToolStripMenuItem->Size = System::Drawing::Size(119, 22);
-			this->memoryToolStripMenuItem->Text = L"Memory";
+			this->memoryToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->memoryToolStripMenuItem->Text = L"From Memory";
 			this->memoryToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::memoryToolStripMenuItem_Click);
 			// 
 			// imagesToolStripMenuItem
 			// 
 			this->imagesToolStripMenuItem->Name = L"imagesToolStripMenuItem";
-			this->imagesToolStripMenuItem->Size = System::Drawing::Size(119, 22);
-			this->imagesToolStripMenuItem->Text = L"Images";
+			this->imagesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->imagesToolStripMenuItem->Text = L"From Images";
 			this->imagesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::imagesToolStripMenuItem_Click);
 			// 
 			// dumpSpritesToolStripMenuItem
 			// 
 			this->dumpSpritesToolStripMenuItem->Name = L"dumpSpritesToolStripMenuItem";
-			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(170, 22);
-			this->dumpSpritesToolStripMenuItem->Text = L"Dump Sprites";
+			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->dumpSpritesToolStripMenuItem->Text = L"Export Sprites";
 			this->dumpSpritesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::dumpSpritesToolStripMenuItem_Click);
 			// 
 			// aboutToolStripMenuItem
@@ -244,7 +244,7 @@ namespace PopSpriteEditor {
 			// 
 			this->debugDataToolStripMenuItem->CheckOnClick = true;
 			this->debugDataToolStripMenuItem->Name = L"debugDataToolStripMenuItem";
-			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(168, 22);
+			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->debugDataToolStripMenuItem->Text = L"Show Debug Data";
 			this->debugDataToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::debugDataToolStripMenuItem_CheckedChanged);
 			// 
@@ -253,6 +253,7 @@ namespace PopSpriteEditor {
 			this->aboutToolStripMenuItem1->Name = L"aboutToolStripMenuItem1";
 			this->aboutToolStripMenuItem1->Size = System::Drawing::Size(52, 20);
 			this->aboutToolStripMenuItem1->Text = L"About";
+			this->aboutToolStripMenuItem1->Click += gcnew System::EventHandler(this, &MainForm::aboutToolStripMenuItem1_Click);
 			// 
 			// ctrlGroupBoxSelect
 			// 
@@ -466,11 +467,13 @@ private: System::Void memoryToolStripMenuItem_Click(System::Object^  sender, Sys
 private: System::Void dumpSpritesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void imagesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlNumericGoto_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+private: System::Void aboutToolStripMenuItem1_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed
 	{
 	public:
 		static MainForm^ MainWindow;
+		static Form^ AboutWindow;
 	};
 }

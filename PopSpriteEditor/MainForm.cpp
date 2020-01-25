@@ -23,6 +23,7 @@
 #include "Utility.h"
 #include "Sprite.h"
 #include "Palette.h"
+#include "AboutForm.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -306,5 +307,14 @@ inline System::Void PopSpriteEditor::MainForm::ctrlNumericGoto_KeyDown(System::O
 		ctrlListSprites->SelectedItems[0]->Selected = true;
 		ctrlListSprites->Select();
 		ctrlListSprites->EnsureVisible(spriteIndex);
+	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::aboutToolStripMenuItem1_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	if (PopSpriteEditor::GlobalForms::AboutWindow == nullptr)
+	{
+		PopSpriteEditor::GlobalForms::AboutWindow = gcnew PopSpriteEditor::AboutForm();
+		PopSpriteEditor::GlobalForms::AboutWindow->Show();
 	}
 }
