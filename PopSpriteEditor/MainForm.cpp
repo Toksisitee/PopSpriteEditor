@@ -24,6 +24,7 @@
 #include "Sprite.h"
 #include "Palette.h"
 #include "AboutForm.h"
+#include "Editor.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -216,6 +217,7 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Obje
 
 inline System::Void PopSpriteEditor::MainForm::MainForm_Load(System::Object ^ sender, System::EventArgs ^ e)
 {
+	GlobalForms::MainWindow->Text = "PopSpriteEditor - v" + EDITOR_VERSION;
 	ctrlSpriteImg->BackColor = Color::White;
 	ctrlSpriteImg2->BackColor = Color::White;
 	ctrlPaletteImg->BackColor = Color::White;

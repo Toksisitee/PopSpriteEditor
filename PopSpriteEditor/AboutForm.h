@@ -40,6 +40,8 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::LinkLabel^  linkLabel2;
 	private: System::Windows::Forms::Label^  label1;
 	private: System::Windows::Forms::RichTextBox^  ctrlAboutRichText;
+	private: System::Windows::Forms::Label^  label3;
+	private: System::Windows::Forms::Label^  VersionLabel;
 
 	private:
 		/// <summary>
@@ -60,6 +62,8 @@ namespace PopSpriteEditor {
 			this->linkLabel2 = (gcnew System::Windows::Forms::LinkLabel());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->ctrlAboutRichText = (gcnew System::Windows::Forms::RichTextBox());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->VersionLabel = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlAboutIcon))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -76,7 +80,7 @@ namespace PopSpriteEditor {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(168, 230);
+			this->label2->Location = System::Drawing::Point(168, 239);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(116, 13);
 			this->label2->TabIndex = 9;
@@ -86,7 +90,7 @@ namespace PopSpriteEditor {
 			// 
 			this->linkLabel2->AutoSize = true;
 			this->linkLabel2->LinkBehavior = System::Windows::Forms::LinkBehavior::AlwaysUnderline;
-			this->linkLabel2->Location = System::Drawing::Point(107, 230);
+			this->linkLabel2->Location = System::Drawing::Point(107, 239);
 			this->linkLabel2->Name = L"linkLabel2";
 			this->linkLabel2->Size = System::Drawing::Size(55, 13);
 			this->linkLabel2->TabIndex = 8;
@@ -97,7 +101,7 @@ namespace PopSpriteEditor {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(11, 230);
+			this->label1->Location = System::Drawing::Point(11, 239);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(90, 13);
 			this->label1->TabIndex = 7;
@@ -105,25 +109,45 @@ namespace PopSpriteEditor {
 			// 
 			// ctrlAboutRichText
 			// 
-			this->ctrlAboutRichText->Location = System::Drawing::Point(12, 246);
+			this->ctrlAboutRichText->Location = System::Drawing::Point(12, 283);
 			this->ctrlAboutRichText->Name = L"ctrlAboutRichText";
 			this->ctrlAboutRichText->Size = System::Drawing::Size(380, 116);
 			this->ctrlAboutRichText->TabIndex = 6;
 			this->ctrlAboutRichText->Text = L"";
 			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Location = System::Drawing::Point(12, 259);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(45, 13);
+			this->label3->TabIndex = 10;
+			this->label3->Text = L"Version:";
+			// 
+			// VersionLabel
+			// 
+			this->VersionLabel->AutoSize = true;
+			this->VersionLabel->Location = System::Drawing::Point(63, 259);
+			this->VersionLabel->Name = L"VersionLabel";
+			this->VersionLabel->Size = System::Drawing::Size(22, 13);
+			this->VersionLabel->TabIndex = 11;
+			this->VersionLabel->Text = L"1.0";
+			// 
 			// AboutForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(404, 371);
+			this->ClientSize = System::Drawing::Size(404, 411);
+			this->Controls->Add(this->VersionLabel);
+			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->linkLabel2);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->ctrlAboutRichText);
 			this->Controls->Add(this->ctrlAboutIcon);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->MaximumSize = System::Drawing::Size(420, 410);
-			this->MinimumSize = System::Drawing::Size(420, 410);
+			this->MaximumSize = System::Drawing::Size(420, 450);
+			this->MinimumSize = System::Drawing::Size(420, 450);
 			this->Name = L"AboutForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
 			this->Text = L"About";
