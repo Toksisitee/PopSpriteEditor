@@ -306,10 +306,14 @@ void CSprite::ImportToBank(std::string& path)
 
 				if (!bmp)
 				{
+					printf("Problem with bmp index #%i\n", idx);
+					// HSPR0-0
 					if (idx != 71 && idx != 167 && idx != 2130 && idx != 4484 &&
 						idx != 5182 && idx != 5184 && idx != 5186 && idx != 5188 &&
 						idx != 5190 && idx != 5192 && idx != 5767 && idx != 6320 &&
-						idx != 6876 && idx != 6878)
+						idx != 6876 && idx != 6878 &&
+						// hfx0-0
+						idx != 1089 && idx != 1449 && idx != 1593 && idx != 1731)
 					{
 						printf("Failed to open: %s\n", tmp.c_str());
 						return;
