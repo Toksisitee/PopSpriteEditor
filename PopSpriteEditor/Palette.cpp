@@ -22,6 +22,8 @@
 
 RGB g_Palette[256];
 
+uint8_t Palette::ColorKey = 255;
+
 void Palette::Save(RGB* Palette)
 {
 	bitmap_image pal(16, 16);
@@ -63,10 +65,10 @@ void Palette::Load(std::string& file)
 
 uint8_t Palette::FindClosestColor(RGB rgb)
 {
-	uint8_t index = 255;
+	uint8_t index = Palette::ColorKey;
 	double closestDist = DBL_MAX;
 
-	for (int i = 128; i < 256; i++)
+	for (uint32_t i = 128; i < 256; i++)
 	{
 		auto deltaE = sqrt(
 			pow(rgb.R - g_Palette[i].R, 2) +
@@ -85,7 +87,17 @@ uint8_t Palette::FindClosestColor(RGB rgb)
 
 uint8_t Palette::FindColor(RGB rgb, bool closest)
 {
-	for (int i = 128; i < 256; i++)
+	if (Palette::ColorKey == 0)
+	{
+		if (rgb.R == g_Palette[0].R &&
+			rgb.G == g_Palette[0].G &&
+			rgb.B == g_Palette[0].B)
+		{
+			return (0);
+		}
+	}
+
+	for (uint32_t i = 128; i < 256; i++)
 	{
 		if (rgb.R == g_Palette[i].R &&
 			rgb.G == g_Palette[i].G &&
@@ -99,5 +111,5 @@ uint8_t Palette::FindColor(RGB rgb, bool closest)
 	if (closest)
 		return Palette::FindClosestColor(rgb);
 
-	return 255;
+	return Palette::ColorKey;
 }

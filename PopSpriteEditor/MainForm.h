@@ -79,6 +79,9 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::ToolStripMenuItem^  dumpSpritesToolStripMenuItem;
 	private: System::Windows::Forms::ContextMenuStrip^  ctrlListSpritesContext;
 	private: System::Windows::Forms::ToolStripMenuItem^  CopyOffset;
+	private: System::Windows::Forms::ToolStripMenuItem^  asdToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  toolStripMenuItem2;
+	private: System::Windows::Forms::ToolStripMenuItem^  toolStripMenuItem3;
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -111,6 +114,9 @@ namespace PopSpriteEditor {
 			this->imagesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->dumpSpritesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->asdToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->toolStripMenuItem2 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->toolStripMenuItem3 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->debugDataToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ctrlGroupBoxSelect = (gcnew System::Windows::Forms::GroupBox());
@@ -243,16 +249,43 @@ namespace PopSpriteEditor {
 			// 
 			// aboutToolStripMenuItem
 			// 
-			this->aboutToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->debugDataToolStripMenuItem });
+			this->aboutToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->asdToolStripMenuItem,
+					this->debugDataToolStripMenuItem
+			});
 			this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
 			this->aboutToolStripMenuItem->Size = System::Drawing::Size(61, 20);
 			this->aboutToolStripMenuItem->Text = L"Options";
+			// 
+			// asdToolStripMenuItem
+			// 
+			this->asdToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->toolStripMenuItem2,
+					this->toolStripMenuItem3
+			});
+			this->asdToolStripMenuItem->Name = L"asdToolStripMenuItem";
+			this->asdToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->asdToolStripMenuItem->Text = L"Color Key";
+			// 
+			// toolStripMenuItem2
+			// 
+			this->toolStripMenuItem2->Name = L"toolStripMenuItem2";
+			this->toolStripMenuItem2->Size = System::Drawing::Size(180, 22);
+			this->toolStripMenuItem2->Text = L"Last Index (Pink)";
+			this->toolStripMenuItem2->Click += gcnew System::EventHandler(this, &MainForm::toolStripMenuItem2_Click);
+			// 
+			// toolStripMenuItem3
+			// 
+			this->toolStripMenuItem3->Name = L"toolStripMenuItem3";
+			this->toolStripMenuItem3->Size = System::Drawing::Size(180, 22);
+			this->toolStripMenuItem3->Text = L"First Index";
+			this->toolStripMenuItem3->Click += gcnew System::EventHandler(this, &MainForm::toolStripMenuItem3_Click);
 			// 
 			// debugDataToolStripMenuItem
 			// 
 			this->debugDataToolStripMenuItem->CheckOnClick = true;
 			this->debugDataToolStripMenuItem->Name = L"debugDataToolStripMenuItem";
-			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(168, 22);
+			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->debugDataToolStripMenuItem->Text = L"Show Debug Data";
 			this->debugDataToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::debugDataToolStripMenuItem_CheckedChanged);
 			// 
@@ -493,6 +526,8 @@ private: System::Void ctrlNumericGoto_KeyDown(System::Object^  sender, System::W
 private: System::Void aboutToolStripMenuItem1_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlListSprites_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 private: System::Void CopyOffset_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void toolStripMenuItem2_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void toolStripMenuItem3_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed

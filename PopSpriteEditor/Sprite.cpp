@@ -73,6 +73,7 @@ bool CSprite::LoadBank(const std::string& file)
 			printf("#%i Height: %i, Width: %i, Offsets: (H)%06X && (D)%06X\n", i, SprBank.Data.back().Sprite.Height, SprBank.Data.back().Sprite.Width, ((1 + i) * sizeof(CSprite::BankHeader)), SprBank.Data.back().Sprite.Offset);
 #endif
 		}
+		printf("Opened sprite bank file.\n");
 		return true;
 	}
 	
@@ -149,7 +150,7 @@ void CSprite::SaveSprite(uint16_t index)
 			pal_idx = SprBank.Data[index].Map[x][y];
 
 			if (pal_idx == 0)
-				pal_idx = 255;
+				pal_idx = Palette::ColorKey;
 
 			bmp.set_pixel(x, y, g_Palette[pal_idx].R, g_Palette[pal_idx].G, g_Palette[pal_idx].B);
 		}
@@ -178,7 +179,7 @@ System::Drawing::Bitmap^ CSprite::getSpriteBitmapHandle(uint16_t index)
 			pal_idx = SprBank.Data[index].Map[x][y];
 
 			if (pal_idx == 0)
-				pal_idx = 255;
+				pal_idx = Palette::ColorKey;
 
 			auto clr = System::Drawing::Color::FromArgb(
 				255,
@@ -231,7 +232,7 @@ void CSprite::ConvertBitmapToData(bitmap_image sprbmp, std::vector<uint8_t>& vec
 
 	for (const auto& idx : pal)
 	{
-		if (idx == 255)
+		if (idx == Palette::ColorKey)
 		{
 			bs++;
 
@@ -306,7 +307,7 @@ void CSprite::ImportToBank(std::string& path)
 
 				if (!bmp)
 				{
-					printf("Problem with bmp index #%i\n", idx);
+					printf("Problem with bitmap: #%i\n", idx);
 					// HSPR0-0
 					if (idx != 71 && idx != 167 && idx != 2130 && idx != 4484 &&
 						idx != 5182 && idx != 5184 && idx != 5186 && idx != 5188 &&
@@ -349,6 +350,7 @@ void CSprite::ImportToBank(std::string& path)
 	spro = sizeof(CSprite::BankHeader) + (sizeof(CSprite::TbSprite) * sprf);
 	printf("Offset starting at %#04X\n", spro);
 
+	printf("Writing data, please wait..\n");
 	std::ofstream ofs(path, std::ios::binary | std::ios::trunc);
 	if (ofs.is_open())
 	{
@@ -378,6 +380,10 @@ void CSprite::ImportToBank(std::string& path)
 			}
 		}
 
+		printf("Created sprite bank file\n");
 		ofs.close();
+		return;
 	}
+
+	printf("Failed to open output stream. Sprite bank file was NOT created\n");
 }
