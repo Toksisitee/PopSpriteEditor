@@ -31,6 +31,7 @@ using namespace System::Windows::Forms;
 using namespace System::IO;
 
 CSprite g_Sprite;
+gcroot<System::String^> g_InitialDirectory = nullptr;
 
 [STAThreadAttribute]
 int main(array<System::String^> ^args)
@@ -59,10 +60,15 @@ inline System::Void PopSpriteEditor::MainForm::openToolStripMenuItem_Click(Syste
 	auto dialog = gcnew OpenFileDialog();
 	dialog->Title = "Open Sprite Bank";
 	dialog->Filter = "Data|*.dat|Sprite|*.spr";
-	dialog->InitialDirectory = Directory::GetCurrentDirectory();
+
+	if (static_cast<String^>(g_InitialDirectory) == nullptr)
+		dialog->InitialDirectory = Directory::GetCurrentDirectory();
+	else
+		dialog->InitialDirectory = g_InitialDirectory;
 
 	if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 	{
+		g_InitialDirectory = dialog->FileName;
 		msclr::interop::marshal_context context;
 		if (g_Sprite.LoadBank(context.marshal_as<std::string>(dialog->FileName)))
 		{
