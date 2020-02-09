@@ -21,7 +21,7 @@
 
 inline System::Void PopSpriteEditor::AboutForm::AboutForm_Load(System::Object ^ sender, System::EventArgs ^ e) 
 {
-	VersionLabel->Text = EDITOR_VERSION;
+	VersionLabel->Text = EDITOR_VERSION + " @ " + EDITOR_DATE;
 	ctrlAboutRichText->Text =
 "PopSpriteEditor is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\n\
 the Free Software Foundation, either version 3 of the License, or\n\

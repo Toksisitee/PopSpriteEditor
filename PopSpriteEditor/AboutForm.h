@@ -127,7 +127,7 @@ namespace PopSpriteEditor {
 			// VersionLabel
 			// 
 			this->VersionLabel->AutoSize = true;
-			this->VersionLabel->Location = System::Drawing::Point(63, 259);
+			this->VersionLabel->Location = System::Drawing::Point(107, 259);
 			this->VersionLabel->Name = L"VersionLabel";
 			this->VersionLabel->Size = System::Drawing::Size(22, 13);
 			this->VersionLabel->TabIndex = 11;
