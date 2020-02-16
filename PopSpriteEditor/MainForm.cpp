@@ -346,15 +346,3 @@ inline System::Void PopSpriteEditor::MainForm::CopyOffset_Click(System::Object ^
 	uint16_t selectedIndex = ctrlListSprites->FocusedItem->Index;
 	System::Windows::Forms::Clipboard::SetText(g_Sprite.SprBank.Data[selectedIndex].Sprite.Offset.ToString("X2"));
 }
-
-inline System::Void PopSpriteEditor::MainForm::toolStripMenuItem2_Click(System::Object ^ sender, System::EventArgs ^ e) 
-{
-	Palette::ColorKey = 255;
-	printf("ColorKey: %i\n", Palette::ColorKey);
-}
-
-inline System::Void PopSpriteEditor::MainForm::toolStripMenuItem3_Click(System::Object ^ sender, System::EventArgs ^ e) 
-{
-	Palette::ColorKey = 0;
-	printf("ColorKey: %i\n", Palette::ColorKey);
-}
