@@ -113,7 +113,7 @@ inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChan
 		System::String^ hexByte;
 		std::vector<uint8_t> bmpData;
 
-		g_Sprite.ConvertBitmapToData(GetCurrentDir() + "output\\" + std::to_string(selectedIndex) + ".bmp", bmpData);
+		g_Sprite.ConvertBitmapToData(GetCurrentDir() + "output\\" + std::to_string(selectedIndex) + ".bmp", bmpData, selectedIndex, g_Sprite.SprBank.Header.Frames);
 		ctrlHexBMPView->Clear();
 		ctrlSpriteDataBMPLength->Text = "BMP Data (conversion). Length: " + bmpData.size();
 		for (auto const& byte : bmpData)
