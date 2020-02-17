@@ -141,7 +141,7 @@ void CSprite::SaveSprite(uint16_t index)
 	uint8_t pal_idx;
 	BMP bmp;
 	uint16_t min = 1;
-	bmp.SetSize(SprBank.Data[index].Sprite.Width, SprBank.Data[index].Sprite.Height);
+	bmp.SetSize(std::max(min, SprBank.Data[index].Sprite.Width), std::max(min, SprBank.Data[index].Sprite.Height));
 	bmp.SetBitDepth(24);
 
 	MapSprite(index);
