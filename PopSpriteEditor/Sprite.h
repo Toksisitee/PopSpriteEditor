@@ -52,7 +52,7 @@ public:
 	void SaveSprite(uint16_t index);
 	void DumpMemoryToBank(std::string& path);
 	void ImportToBank(std::string& path);
-	void ConvertBitmapToData(bitmap_image sprbmp, std::vector<uint8_t>& vec, int32_t index, uint32_t maxIndex);
+	void ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t index, uint32_t maxIndex);
 	System::Drawing::Bitmap^ getSpriteBitmapHandle(uint16_t index);
 	void Clear() { delete[] m_pBuffer; SprBank.Data.clear(); }
 

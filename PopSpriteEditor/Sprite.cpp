@@ -19,9 +19,10 @@
 #include <cstdint>
 #include <fstream>
 #include "Utility.h"
-#include "bitmap_image.hpp"
+#include "EasyBMP/EasyBMP.h"
 #include "Palette.h"
 #include <filesystem>
+#include <algorithm>
 #include "Sprite.h"
 
 bool CSprite::LoadBank(const std::string& file)
@@ -138,11 +139,13 @@ void CSprite::MapSprite(uint16_t index)
 void CSprite::SaveSprite(uint16_t index)
 {
 	uint8_t pal_idx;
-	bitmap_image bmp(SprBank.Data[index].Sprite.Width, SprBank.Data[index].Sprite.Height);
-	bmp.clear();
+	BMP bmp;
+	uint16_t min = 1;
+	bmp.SetSize(SprBank.Data[index].Sprite.Width, SprBank.Data[index].Sprite.Height);
+	bmp.SetBitDepth(24);
 
 	MapSprite(index);
-
+	
 	for (uint8_t x = 0; x < SprBank.Data[index].Sprite.Width; x++)
 	{
 		for (uint8_t y = 0; y < SprBank.Data[index].Sprite.Height; y++)
@@ -152,11 +155,11 @@ void CSprite::SaveSprite(uint16_t index)
 			if (pal_idx == 0)
 				pal_idx = Palette::ColorKeys[0];
 
-			bmp.set_pixel(x, y, g_Palette[pal_idx].R, g_Palette[pal_idx].G, g_Palette[pal_idx].B);
+			bmp.SetPixel(x, y, { g_Palette[pal_idx].B, g_Palette[pal_idx].G, g_Palette[pal_idx].R, 0 });
 		}
 	}
 
-	bmp.save_image(GetCurrentDir() + "//output//" + std::to_string(index) + ".bmp");
+	bmp.WriteToFile((GetCurrentDir() + "//output//" + std::to_string(index) + ".bmp").c_str());
 }
 
 System::Drawing::Bitmap^ CSprite::getSpriteBitmapHandle(uint16_t index)
@@ -205,7 +208,7 @@ void CSprite::DumpMemoryToBank(std::string& path)
 	}
 }
 
-void CSprite::ConvertBitmapToData(bitmap_image sprbmp, std::vector<uint8_t>& vec, int32_t index, uint32_t maxIndex)
+void CSprite::ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t index, uint32_t maxIndex)
 {
 	uint8_t bs = 0
 		, br = 0;
@@ -213,13 +216,12 @@ void CSprite::ConvertBitmapToData(bitmap_image sprbmp, std::vector<uint8_t>& vec
 		, sprh
 		, px = 0
 		, br_idx;
-	rgb_t rgb_t;
+	RGBApixel rgb;
 	std::vector<uint8_t> pal;
 	bool bClrs = false;
 	bool bFixShadows = (index >= 0 && index <= 70) && (maxIndex > 7952) ? true : false; // fair to assume it's the HSPR bank
-
-	sprw = sprbmp.width();
-	sprh = sprbmp.height();
+	sprw = sprbmp.TellWidth();
+	sprh = sprbmp.TellHeight();
 
 	if (bFixShadows)
 	{
@@ -293,8 +295,8 @@ void CSprite::ConvertBitmapToData(bitmap_image sprbmp, std::vector<uint8_t>& vec
 	{
 		for (uint32_t x = 0; x < sprw; x++)
 		{
-			sprbmp.get_pixel(x, y, rgb_t);
-			auto idx = Palette::FindColor({ rgb_t.red, rgb_t.green, rgb_t.blue }, true);
+			rgb = sprbmp.GetPixel(x, y);
+			auto idx = Palette::FindColor({ rgb.Red, rgb.Green, rgb.Blue }, true);
 
 			if (bFixShadows)
 				if (idx == 255)
@@ -397,7 +399,7 @@ void CSprite::ImportToBank(std::string& path)
 		, sprh;
 	uint32_t sprf = 0
 		, spro = 0;
-	std::vector<std::pair<uint32_t, bitmap_image>> spri;
+	std::vector<std::pair<uint32_t, std::shared_ptr<BMP>>> spri;
 	std::vector<uint8_t> conv, pal;
 	std::vector<std::vector<uint8_t>> data;
 	char szMagic[4] = { 0x50, 0x53, 0x46, 0x42 };
@@ -412,9 +414,8 @@ void CSprite::ImportToBank(std::string& path)
 			if (std::all_of(tmp.begin(), tmp.end(), isdigit))
 			{
 				uint32_t idx = std::stoi(tmp);
-				bitmap_image bmp(entry.path().string());
-
-				if (!bmp)
+				auto bmp = std::make_shared<BMP>();
+				if (!bmp->ReadFromFile((entry.path().string()).c_str()))
 				{
 					printf("Problem with bitmap: #%i\n", idx);
 					// HSPR0-0
@@ -430,7 +431,7 @@ void CSprite::ImportToBank(std::string& path)
 					}
 					else
 					{
-						bmp.setwidth_height(0, 0);
+						bmp->SetSize(1, 1);
 					}
 				}
 
@@ -441,13 +442,15 @@ void CSprite::ImportToBank(std::string& path)
 	}
 
 	std::sort(spri.begin(), spri.end(), [](
-		const std::pair<uint32_t, bitmap_image>& fspr, const std::pair<uint32_t, bitmap_image>& sspr)
+		const std::pair<uint32_t, std::shared_ptr<BMP>>& fspr, 
+		const std::pair<uint32_t, std::shared_ptr<BMP>>& sspr)
 	{
 		return (fspr.first < sspr.first);
 	});
 
 	auto it = std::unique(spri.begin(), spri.end(), [](
-		const std::pair<uint32_t, bitmap_image>& fspr, const std::pair<uint32_t, bitmap_image>& sspr)
+		const std::pair<uint32_t, std::shared_ptr<BMP>>& fspr, 
+		const std::pair<uint32_t, std::shared_ptr<BMP>>& sspr)
 	{
 		return fspr.first == sspr.first;
 	});
@@ -468,9 +471,9 @@ void CSprite::ImportToBank(std::string& path)
 
 		for (uint32_t i = 0; i < sprf; i++)
 		{
-			sprw = spri[i].second.width();
-			sprh = spri[i].second.height();
-			ConvertBitmapToData(spri[i].second, conv, i, spri.size());
+			sprw = spri[i].second->TellWidth();
+			sprh = spri[i].second->TellHeight();
+			ConvertBitmapToData(*spri[i].second, conv, i, spri.size());
 
 			ofs.write(reinterpret_cast<const char*>(&sprw), sizeof(uint16_t));
 			ofs.write(reinterpret_cast<const char*>(&sprh), sizeof(uint16_t));
@@ -491,8 +494,9 @@ void CSprite::ImportToBank(std::string& path)
 
 		printf("Created sprite bank file\n");
 		ofs.close();
-		return;
 	}
-
-	printf("Failed to open output stream. Sprite bank file was NOT created\n");
+	else
+	{
+		printf("Failed to open output stream. Sprite bank file was NOT created\n");
+	}
 }

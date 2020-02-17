@@ -19,7 +19,7 @@
 #define NOMINMAX
 #include <Windows.h>
 #include <msclr\marshal_cppstd.h>
-#include "bitmap_image.hpp"
+#include "EasyBMP/EasyBMP.h"
 #include "Utility.h"
 #include "Sprite.h"
 #include "Palette.h"
@@ -112,8 +112,10 @@ inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChan
 	{
 		System::String^ hexByte;
 		std::vector<uint8_t> bmpData;
+		BMP bmp;
+		bmp.ReadFromFile((GetCurrentDir() + "output\\" + std::to_string(selectedIndex) + ".bmp").c_str());
+		g_Sprite.ConvertBitmapToData(bmp, bmpData, selectedIndex, g_Sprite.SprBank.Header.Frames);
 
-		g_Sprite.ConvertBitmapToData(GetCurrentDir() + "output\\" + std::to_string(selectedIndex) + ".bmp", bmpData, selectedIndex, g_Sprite.SprBank.Header.Frames);
 		ctrlHexBMPView->Clear();
 		ctrlSpriteDataBMPLength->Text = "BMP Data (conversion). Length: " + bmpData.size();
 		for (auto const& byte : bmpData)
@@ -279,10 +281,12 @@ inline System::Void PopSpriteEditor::MainForm::memoryToolStripMenuItem_Click(Sys
 
 inline System::Void PopSpriteEditor::MainForm::dumpSpritesToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
 {
+	printf("Exporting sprites, please wait..\n");
 	for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
 	{
 		g_Sprite.SaveSprite(i);
 	}
+	printf("Done\n");
 }
 
 inline System::Void PopSpriteEditor::MainForm::imagesToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 

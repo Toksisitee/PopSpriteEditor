@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\EasyBMP">
+      <UniqueIdentifier>{a5e81182-e664-42d4-b4d0-c4d101d84dfc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainForm.cpp">
@@ -28,6 +31,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AboutForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EasyBMP\EasyBMP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -55,6 +61,18 @@
     </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EasyBMP\EasyBMP.h">
+      <Filter>Header Files\EasyBMP</Filter>
+    </ClInclude>
+    <ClInclude Include="EasyBMP\EasyBMP_BMP.h">
+      <Filter>Header Files\EasyBMP</Filter>
+    </ClInclude>
+    <ClInclude Include="EasyBMP\EasyBMP_DataStructures.h">
+      <Filter>Header Files\EasyBMP</Filter>
+    </ClInclude>
+    <ClInclude Include="EasyBMP\EasyBMP_VariousBMPutilities.h">
+      <Filter>Header Files\EasyBMP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
