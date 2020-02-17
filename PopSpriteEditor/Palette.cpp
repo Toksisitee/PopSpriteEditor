@@ -23,7 +23,7 @@
 
 RGB g_Palette[256];
 
-uint8_t Palette::ColorKeys[2] = { 255, 0 };
+uint8_t Palette::ColorKeys[3] = { 255, 0, 255 };
 
 void Palette::Save(RGB* Palette)
 {
@@ -111,4 +111,15 @@ uint8_t Palette::FindColor(RGB rgb, bool closest)
 		return Palette::FindClosestColor(rgb);
 
 	return Palette::ColorKeys[0];
+}
+
+bool Palette::IndexIsColorKey(uint8_t index)
+{
+	for (uint8_t i = 0; i < (sizeof(Palette::ColorKeys) / sizeof(Palette::ColorKeys[0])); i++)
+	{
+		if (index == Palette::ColorKeys[i])
+			return true;
+	}
+
+	return false;
 }

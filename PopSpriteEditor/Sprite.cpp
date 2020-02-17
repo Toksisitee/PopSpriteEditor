@@ -152,7 +152,7 @@ void CSprite::SaveSprite(uint16_t index)
 		{
 			pal_idx = SprBank.Data[index].Map[x][y];
 
-			if (pal_idx == 0)
+			if (Palette::IndexIsColorKey(pal_idx))
 				pal_idx = Palette::ColorKeys[0];
 
 			bmp.SetPixel(x, y, { g_Palette[pal_idx].B, g_Palette[pal_idx].G, g_Palette[pal_idx].R, 0 });
@@ -181,7 +181,7 @@ System::Drawing::Bitmap^ CSprite::getSpriteBitmapHandle(uint16_t index)
 		{
 			pal_idx = SprBank.Data[index].Map[x][y];
 
-			if (pal_idx == 0)
+			if (Palette::IndexIsColorKey(pal_idx))
 				pal_idx = Palette::ColorKeys[0];
 
 			auto clr = System::Drawing::Color::FromArgb(
@@ -299,7 +299,7 @@ void CSprite::ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t
 			auto idx = Palette::FindColor({ rgb.Red, rgb.Green, rgb.Blue }, true);
 
 			if (bFixShadows)
-				if (idx == 255)
+				if (Palette::IndexIsColorKey(idx))
 					idx = 0;
 
 			pal.push_back(idx);
@@ -342,7 +342,7 @@ void CSprite::ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t
 	{
 		for (const auto& idx : pal)
 		{
-			if (idx == Palette::ColorKeys[0] || idx == Palette::ColorKeys[1])
+			if (Palette::IndexIsColorKey(idx))
 			{
 				bs++;
 
