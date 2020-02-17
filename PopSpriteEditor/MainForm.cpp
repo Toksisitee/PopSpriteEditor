@@ -350,3 +350,22 @@ inline System::Void PopSpriteEditor::MainForm::CopyOffset_Click(System::Object ^
 	uint16_t selectedIndex = ctrlListSprites->FocusedItem->Index;
 	System::Windows::Forms::Clipboard::SetText(g_Sprite.SprBank.Data[selectedIndex].Sprite.Offset.ToString("X2"));
 }
+
+inline System::Void PopSpriteEditor::MainForm::toolStripTextBox1_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e) 
+{
+	e->Handled = !Char::IsDigit(e->KeyChar) && !Char::IsControl(e->KeyChar);
+}
+
+inline System::Void PopSpriteEditor::MainForm::toolStripTextBox1_TextChanged(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	ToolStripTextBox^ box = safe_cast<ToolStripTextBox^>(sender);
+	auto index = UInt32::Parse(box->Text);
+
+	if (index > ((sizeof(g_Palette) / sizeof(g_Palette[0])) - 1))
+	{
+		index = 255;
+		box->Text = "255";
+	}
+
+	Palette::ColorKeys[2] = index;
+}

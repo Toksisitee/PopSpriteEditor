@@ -79,6 +79,8 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::ToolStripMenuItem^  dumpSpritesToolStripMenuItem;
 	private: System::Windows::Forms::ContextMenuStrip^  ctrlListSpritesContext;
 	private: System::Windows::Forms::ToolStripMenuItem^  CopyOffset;
+	private: System::Windows::Forms::ToolStripMenuItem^  colorKeyToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripTextBox^  toolStripTextBox1;
 
 
 
@@ -114,6 +116,8 @@ namespace PopSpriteEditor {
 			this->imagesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->dumpSpritesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->colorKeyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->toolStripTextBox1 = (gcnew System::Windows::Forms::ToolStripTextBox());
 			this->debugDataToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ctrlGroupBoxSelect = (gcnew System::Windows::Forms::GroupBox());
@@ -246,17 +250,36 @@ namespace PopSpriteEditor {
 			// 
 			// aboutToolStripMenuItem
 			// 
-			this->aboutToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->debugDataToolStripMenuItem });
+			this->aboutToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->colorKeyToolStripMenuItem,
+					this->debugDataToolStripMenuItem
+			});
 			this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
 			this->aboutToolStripMenuItem->Size = System::Drawing::Size(61, 20);
 			this->aboutToolStripMenuItem->Text = L"Options";
+			// 
+			// colorKeyToolStripMenuItem
+			// 
+			this->colorKeyToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->toolStripTextBox1 });
+			this->colorKeyToolStripMenuItem->Name = L"colorKeyToolStripMenuItem";
+			this->colorKeyToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->colorKeyToolStripMenuItem->Text = L"Color Key";
+			// 
+			// toolStripTextBox1
+			// 
+			this->toolStripTextBox1->Name = L"toolStripTextBox1";
+			this->toolStripTextBox1->ShortcutsEnabled = false;
+			this->toolStripTextBox1->Size = System::Drawing::Size(100, 23);
+			this->toolStripTextBox1->Text = L"255";
+			this->toolStripTextBox1->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &MainForm::toolStripTextBox1_KeyPress);
+			this->toolStripTextBox1->TextChanged += gcnew System::EventHandler(this, &MainForm::toolStripTextBox1_TextChanged);
 			// 
 			// debugDataToolStripMenuItem
 			// 
 			this->debugDataToolStripMenuItem->CheckOnClick = true;
 			this->debugDataToolStripMenuItem->Name = L"debugDataToolStripMenuItem";
 			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(180, 22);
-			this->debugDataToolStripMenuItem->Text = L"Show Debug Data";
+			this->debugDataToolStripMenuItem->Text = L"Debug";
 			this->debugDataToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::debugDataToolStripMenuItem_CheckedChanged);
 			// 
 			// aboutToolStripMenuItem1
@@ -496,6 +519,8 @@ private: System::Void ctrlNumericGoto_KeyDown(System::Object^  sender, System::W
 private: System::Void aboutToolStripMenuItem1_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlListSprites_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 private: System::Void CopyOffset_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void toolStripTextBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+private: System::Void toolStripTextBox1_TextChanged(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed
