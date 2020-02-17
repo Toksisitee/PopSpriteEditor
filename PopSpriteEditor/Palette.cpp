@@ -16,8 +16,9 @@
 */
 
 #include <stdint.h>
-#include "bitmap_image.hpp"
+#include "EasyBMP/EasyBMP.h"
 #include "Utility.h"
+#include <fstream>
 #include "Palette.h"
 
 RGB g_Palette[256];
@@ -26,20 +27,21 @@ uint8_t Palette::ColorKeys[2] = { 255, 0 };
 
 void Palette::Save(RGB* Palette)
 {
-	bitmap_image pal(16, 16);
-	pal.clear();
+	BMP pal;
+	pal.SetSize(16, 16);
+	pal.SetBitDepth(24);
 
 	int index = 0;
-	for (uint32_t y = 0; y < pal.height(); y++)
+	for (uint32_t y = 0; y < pal.TellHeight(); y++)
 	{
-		for (uint32_t x = 0; x < pal.width(); x++)
+		for (uint32_t x = 0; x < pal.TellWidth(); x++)
 		{
-			pal.set_pixel(x, y, Palette[index].R, Palette[index].G, Palette[index].B);
+			pal.SetPixel(x, y, { Palette[index].B, Palette[index].G, Palette[index].R, 0 });
 			index++;
 		}
 	}
 
-	pal.save_image(GetCurrentDir() + "//output//pal.bmp");
+	pal.WriteToFile((GetCurrentDir() + "//pal.bmp").c_str());
 }
 
 void Palette::Load(std::string& file)
