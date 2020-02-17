@@ -148,7 +148,6 @@
     <ClInclude Include="AboutForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="bitmap_image.hpp" />
     <ClInclude Include="EasyBMP\EasyBMP.h" />
     <ClInclude Include="EasyBMP\EasyBMP_BMP.h" />
     <ClInclude Include="EasyBMP\EasyBMP_DataStructures.h" />
