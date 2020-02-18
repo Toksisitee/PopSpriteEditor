@@ -26,7 +26,7 @@ Usage is straight forward. The numbering (names) of the bitmaps is the order the
 8. Replace the original game's sprite bank with the newly created one.
 
 ### Credits
-[C++ Bitmap Library](https://github.com/ArashPartow/bitmap) by Arash Partow
+[EasyBMP Library](http://easybmp.sourceforge.net/about.html)
 
 ### License
 PopSpriteEditor Copyright © 2020 Toksisitee.  
