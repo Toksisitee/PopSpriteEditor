@@ -36,7 +36,11 @@ along with this program.If not, see < https://www.gnu.org/licenses/>.";
 
 inline System::Void PopSpriteEditor::AboutForm::linkLabel2_LinkClicked(System::Object ^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs ^ e) 
 {
-	System::Diagnostics::Process::Start("https://github.com/Toksisitee");
+	auto label = safe_cast<LinkLabel^>(sender);
+	if (label->Name == "linkLabelTok")
+		System::Diagnostics::Process::Start("https://github.com/Toksisitee");
+	else if (label->Name == "linkLabelBmp")
+		System::Diagnostics::Process::Start("http://easybmp.sourceforge.net/about.html");
 }
 
 inline System::Void PopSpriteEditor::AboutForm::AboutForm_FormClosing(System::Object ^ sender, System::Windows::Forms::FormClosingEventArgs ^ e) 

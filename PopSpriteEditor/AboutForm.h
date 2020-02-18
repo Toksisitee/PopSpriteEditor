@@ -37,11 +37,15 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::PictureBox^  ctrlAboutIcon;
 	protected:
 	private: System::Windows::Forms::Label^  label2;
-	private: System::Windows::Forms::LinkLabel^  linkLabel2;
+	private: System::Windows::Forms::LinkLabel^  linkLabelTok;
+
 	private: System::Windows::Forms::Label^  label1;
 	private: System::Windows::Forms::RichTextBox^  ctrlAboutRichText;
 	private: System::Windows::Forms::Label^  label3;
 	private: System::Windows::Forms::Label^  VersionLabel;
+	private: System::Windows::Forms::Label^  label4;
+	private: System::Windows::Forms::LinkLabel^  linkLabelBmp;
+
 
 	private:
 		/// <summary>
@@ -59,11 +63,13 @@ namespace PopSpriteEditor {
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(AboutForm::typeid));
 			this->ctrlAboutIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->linkLabel2 = (gcnew System::Windows::Forms::LinkLabel());
+			this->linkLabelTok = (gcnew System::Windows::Forms::LinkLabel());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->ctrlAboutRichText = (gcnew System::Windows::Forms::RichTextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->VersionLabel = (gcnew System::Windows::Forms::Label());
+			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->linkLabelBmp = (gcnew System::Windows::Forms::LinkLabel());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlAboutIcon))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -86,17 +92,17 @@ namespace PopSpriteEditor {
 			this->label2->TabIndex = 9;
 			this->label2->Text = L"<meypcm@gmail.com>";
 			// 
-			// linkLabel2
+			// linkLabelTok
 			// 
-			this->linkLabel2->AutoSize = true;
-			this->linkLabel2->LinkBehavior = System::Windows::Forms::LinkBehavior::AlwaysUnderline;
-			this->linkLabel2->Location = System::Drawing::Point(107, 239);
-			this->linkLabel2->Name = L"linkLabel2";
-			this->linkLabel2->Size = System::Drawing::Size(55, 13);
-			this->linkLabel2->TabIndex = 8;
-			this->linkLabel2->TabStop = true;
-			this->linkLabel2->Text = L"Toksisitee";
-			this->linkLabel2->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &AboutForm::linkLabel2_LinkClicked);
+			this->linkLabelTok->AutoSize = true;
+			this->linkLabelTok->LinkBehavior = System::Windows::Forms::LinkBehavior::AlwaysUnderline;
+			this->linkLabelTok->Location = System::Drawing::Point(107, 239);
+			this->linkLabelTok->Name = L"linkLabelTok";
+			this->linkLabelTok->Size = System::Drawing::Size(55, 13);
+			this->linkLabelTok->TabIndex = 8;
+			this->linkLabelTok->TabStop = true;
+			this->linkLabelTok->Text = L"Toksisitee";
+			this->linkLabelTok->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &AboutForm::linkLabel2_LinkClicked);
 			// 
 			// label1
 			// 
@@ -109,16 +115,16 @@ namespace PopSpriteEditor {
 			// 
 			// ctrlAboutRichText
 			// 
-			this->ctrlAboutRichText->Location = System::Drawing::Point(12, 283);
+			this->ctrlAboutRichText->Location = System::Drawing::Point(12, 307);
 			this->ctrlAboutRichText->Name = L"ctrlAboutRichText";
-			this->ctrlAboutRichText->Size = System::Drawing::Size(380, 116);
+			this->ctrlAboutRichText->Size = System::Drawing::Size(380, 142);
 			this->ctrlAboutRichText->TabIndex = 6;
 			this->ctrlAboutRichText->Text = L"";
 			// 
 			// label3
 			// 
 			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(12, 259);
+			this->label3->Location = System::Drawing::Point(12, 261);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(45, 13);
 			this->label3->TabIndex = 10;
@@ -127,27 +133,50 @@ namespace PopSpriteEditor {
 			// VersionLabel
 			// 
 			this->VersionLabel->AutoSize = true;
-			this->VersionLabel->Location = System::Drawing::Point(107, 259);
+			this->VersionLabel->Location = System::Drawing::Point(107, 261);
 			this->VersionLabel->Name = L"VersionLabel";
 			this->VersionLabel->Size = System::Drawing::Size(22, 13);
 			this->VersionLabel->TabIndex = 11;
 			this->VersionLabel->Text = L"1.0";
 			// 
+			// label4
+			// 
+			this->label4->AutoSize = true;
+			this->label4->Location = System::Drawing::Point(12, 283);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(49, 13);
+			this->label4->TabIndex = 12;
+			this->label4->Text = L"Libraries:";
+			// 
+			// linkLabelBmp
+			// 
+			this->linkLabelBmp->AutoSize = true;
+			this->linkLabelBmp->LinkBehavior = System::Windows::Forms::LinkBehavior::AlwaysUnderline;
+			this->linkLabelBmp->Location = System::Drawing::Point(107, 283);
+			this->linkLabelBmp->Name = L"linkLabelBmp";
+			this->linkLabelBmp->Size = System::Drawing::Size(53, 13);
+			this->linkLabelBmp->TabIndex = 13;
+			this->linkLabelBmp->TabStop = true;
+			this->linkLabelBmp->Text = L"EasyBMP";
+			this->linkLabelBmp->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &AboutForm::linkLabel2_LinkClicked);
+			// 
 			// AboutForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(404, 411);
+			this->ClientSize = System::Drawing::Size(404, 461);
+			this->Controls->Add(this->linkLabelBmp);
+			this->Controls->Add(this->label4);
 			this->Controls->Add(this->VersionLabel);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
-			this->Controls->Add(this->linkLabel2);
+			this->Controls->Add(this->linkLabelTok);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->ctrlAboutRichText);
 			this->Controls->Add(this->ctrlAboutIcon);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->MaximumSize = System::Drawing::Size(420, 450);
-			this->MinimumSize = System::Drawing::Size(420, 450);
+			this->MaximumSize = System::Drawing::Size(420, 500);
+			this->MinimumSize = System::Drawing::Size(420, 500);
 			this->Name = L"AboutForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
 			this->Text = L"About";
