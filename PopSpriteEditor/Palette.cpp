@@ -113,6 +113,25 @@ uint8_t Palette::FindColor(RGB rgb, bool closest)
 	return Palette::ColorKeys[0];
 }
 
+uint8_t Palette::FindColorAll(RGB rgb, bool closest)
+{
+	for (uint32_t i = 0; i < 256; i++)
+	{
+		if (rgb.R == g_Palette[i].R &&
+			rgb.G == g_Palette[i].G &&
+			rgb.B == g_Palette[i].B)
+		{
+			return (i);
+		}
+	}
+
+	// Just a fallback
+	if (closest)
+		return Palette::FindClosestColor(rgb);
+
+	return Palette::ColorKeys[0];
+}
+
 bool Palette::IndexIsColorKey(uint8_t index)
 {
 	for (uint8_t i = 0; i < (sizeof(Palette::ColorKeys) / sizeof(Palette::ColorKeys[0])); i++)

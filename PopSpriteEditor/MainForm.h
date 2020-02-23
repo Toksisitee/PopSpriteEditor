@@ -262,7 +262,7 @@ namespace PopSpriteEditor {
 			// 
 			this->colorKeyToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->toolStripTextBox1 });
 			this->colorKeyToolStripMenuItem->Name = L"colorKeyToolStripMenuItem";
-			this->colorKeyToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->colorKeyToolStripMenuItem->Size = System::Drawing::Size(125, 22);
 			this->colorKeyToolStripMenuItem->Text = L"Color Key";
 			// 
 			// toolStripTextBox1
@@ -278,7 +278,7 @@ namespace PopSpriteEditor {
 			// 
 			this->debugDataToolStripMenuItem->CheckOnClick = true;
 			this->debugDataToolStripMenuItem->Name = L"debugDataToolStripMenuItem";
-			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(125, 22);
 			this->debugDataToolStripMenuItem->Text = L"Debug";
 			this->debugDataToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::debugDataToolStripMenuItem_CheckedChanged);
 			// 
@@ -456,6 +456,7 @@ namespace PopSpriteEditor {
 			this->ctrlPaletteImg->TabIndex = 6;
 			this->ctrlPaletteImg->TabStop = false;
 			this->ctrlPaletteImg->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::ctrlPaletteImg_Paint);
+			this->ctrlPaletteImg->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::ctrlPaletteImg_MouseMove);
 			// 
 			// ctrlListSpritesContext
 			// 
@@ -521,6 +522,7 @@ private: System::Void ctrlListSprites_MouseClick(System::Object^  sender, System
 private: System::Void CopyOffset_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void toolStripTextBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 private: System::Void toolStripTextBox1_TextChanged(System::Object^  sender, System::EventArgs^  e);
+private: System::Void ctrlPaletteImg_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed

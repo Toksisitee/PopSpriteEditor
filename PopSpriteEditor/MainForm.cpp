@@ -32,6 +32,18 @@ using namespace System::IO;
 
 CSprite g_Sprite;
 gcroot<System::String^> g_InitialDirectory = nullptr;
+gcroot<ToolTip^> g_PixelTip = nullptr;
+gcroot<System::Drawing::Bitmap^> g_BitmapPalette = nullptr;
+
+struct ScreenPixel
+{
+	int32_t x;
+	int32_t y;
+	uint16_t index;
+	RGB rgb;
+};
+
+ScreenPixel g_ScrPPalette;
 
 [STAThreadAttribute]
 int main(array<System::String^> ^args)
@@ -217,10 +229,25 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Obje
 	double scaleY = (double)ctrlPaletteImg->Height / (double)bmp->Width;
 	double scaleFactor = scaleX < scaleY ? scaleX : scaleY;
 
+	if (g_ScrPPalette.index != -1)
+	{
+		bmp->SetPixel(g_ScrPPalette.x, g_ScrPPalette.y, 
+			System::Drawing::Color::FromArgb(
+				150, 
+				g_ScrPPalette.rgb.R, 
+				g_ScrPPalette.rgb.G, 
+				g_ScrPPalette.rgb.B)
+		);
+
+		g_ScrPPalette.index = -1;
+	}
+
 	g->DrawImage(bmp, static_cast<int32_t>((ctrlPaletteImg->Width - (bmp->Width * scaleFactor)) / 2),
 		static_cast<int32_t>((ctrlPaletteImg->Height - (bmp->Height * scaleFactor)) / 2),
 		static_cast<int32_t>(bmp->Width * scaleFactor),
 		static_cast<int32_t>(bmp->Height * scaleFactor));
+
+	g_BitmapPalette = bmp;
 }
 
 inline System::Void PopSpriteEditor::MainForm::MainForm_Load(System::Object ^ sender, System::EventArgs ^ e)
@@ -230,6 +257,8 @@ inline System::Void PopSpriteEditor::MainForm::MainForm_Load(System::Object ^ se
 	ctrlSpriteImg2->BackColor = Color::White;
 	ctrlPaletteImg->BackColor = Color::White;
 	debugDataToolStripMenuItem_CheckedChanged(nullptr, nullptr);
+	g_PixelTip = gcnew ToolTip();
+	g_PixelTip->ShowAlways = true;
 }
 
 inline System::Void PopSpriteEditor::MainForm::ctrlSpriteSize_ValueChanged(System::Object ^ sender, System::EventArgs ^ e) 
@@ -368,4 +397,38 @@ inline System::Void PopSpriteEditor::MainForm::toolStripTextBox1_TextChanged(Sys
 	}
 
 	Palette::ColorKeys[2] = index;
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseMove(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 
+{
+	if (static_cast<System::Drawing::Bitmap^>(g_BitmapPalette) != nullptr)
+	{
+		auto bmp = g_BitmapPalette;
+		double scaleX = (double)ctrlPaletteImg->Width / (double)bmp->Height;
+		double scaleY = (double)ctrlPaletteImg->Height / (double)bmp->Width;
+		double scaleFactor = scaleX < scaleY ? scaleX : scaleY;
+		auto x = static_cast<int32_t>((ctrlPaletteImg->Width - (bmp->Width * scaleFactor)) / 2);
+		auto y = static_cast<int32_t>((ctrlPaletteImg->Height - (bmp->Height * scaleFactor)) / 2);
+		x = (e->X - x) / scaleFactor;
+		y = (e->Y - y) / scaleFactor;
+
+		if (g_ScrPPalette.x != x || g_ScrPPalette.y != y)
+		{
+			if ((x >= 0) && (x < bmp->Width) && (y >= 0) && (y < bmp->Height))
+			{
+				auto rgb = g_BitmapPalette->GetPixel(x, y);
+				auto index = Palette::FindColorAll({ rgb.R, rgb.G, rgb.B });
+				g_PixelTip->SetToolTip(ctrlPaletteImg, " ");
+				g_PixelTip->ToolTipTitle = "W: " + x + " H: " + y;
+				g_PixelTip->SetToolTip(ctrlPaletteImg, "RGB: " + rgb.R + " " + rgb.G + " " + rgb.B + "\nIndex: " + index);
+
+				g_ScrPPalette.x = x;
+				g_ScrPPalette.y = y;
+				g_ScrPPalette.rgb = { rgb.R, rgb.G, rgb.B };
+				g_ScrPPalette.index = index;
+
+				ctrlPaletteImg->Invalidate();
+			}
+		}
+	}
 }
