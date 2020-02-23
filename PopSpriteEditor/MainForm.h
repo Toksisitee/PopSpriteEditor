@@ -434,6 +434,7 @@ namespace PopSpriteEditor {
 			this->ctrlSpriteImg2->TabIndex = 0;
 			this->ctrlSpriteImg2->TabStop = false;
 			this->ctrlSpriteImg2->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::ctrlSpriteImg2_Paint);
+			this->ctrlSpriteImg2->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::ctrlSpriteImg2_MouseMove);
 			// 
 			// groupBox2
 			// 
@@ -523,6 +524,7 @@ private: System::Void CopyOffset_Click(System::Object^  sender, System::EventArg
 private: System::Void toolStripTextBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 private: System::Void toolStripTextBox1_TextChanged(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlPaletteImg_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+private: System::Void ctrlSpriteImg2_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed

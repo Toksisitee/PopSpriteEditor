@@ -34,6 +34,7 @@ CSprite g_Sprite;
 gcroot<System::String^> g_InitialDirectory = nullptr;
 gcroot<ToolTip^> g_PixelTip = nullptr;
 gcroot<System::Drawing::Bitmap^> g_BitmapPalette = nullptr;
+gcroot<System::Drawing::Bitmap^> g_BitmapSprite = nullptr;
 
 struct ScreenPixel
 {
@@ -44,6 +45,7 @@ struct ScreenPixel
 };
 
 ScreenPixel g_ScrPPalette;
+ScreenPixel g_ScrPSprite;
 
 [STAThreadAttribute]
 int main(array<System::String^> ^args)
@@ -112,6 +114,10 @@ inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChan
 {
 	if (ctrlListSprites->SelectedItems->Count == 0)
 		return;
+
+	g_ScrPSprite.index = -1;
+	g_ScrPSprite.x = 0;
+	g_ScrPSprite.y = 0;
 
 	uint16_t selectedIndex = ctrlListSprites->FocusedItem->Index;
 	g_Sprite.MapSprite(selectedIndex);
@@ -193,10 +199,25 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_Paint(System::Obje
 	auto bmp = g_Sprite.getSpriteBitmapHandle(ctrlListSprites->FocusedItem->Index);
 	uint8_t scaleFactor = ctrlSpriteSize->Value;
 	ctrlSpriteImg2->Size = System::Drawing::Size(bmp->Width * scaleFactor, bmp->Height * scaleFactor);
+
+	if (g_ScrPSprite.index != -1)
+	{
+		bmp->SetPixel(g_ScrPSprite.x, g_ScrPSprite.y,
+			System::Drawing::Color::FromArgb(
+				150,
+				g_ScrPSprite.rgb.R,
+				g_ScrPSprite.rgb.G,
+				g_ScrPSprite.rgb.B)
+		);
+
+		g_ScrPSprite.index = -1;
+	}
+
 	auto g = e->Graphics;
 	g->InterpolationMode = System::Drawing::Drawing2D::InterpolationMode::NearestNeighbor;
 	g->PixelOffsetMode = System::Drawing::Drawing2D::PixelOffsetMode::Half;
 	g->DrawImage(bmp, 0, 0, bmp->Width * scaleFactor, bmp->Height * scaleFactor);
+	g_BitmapSprite = bmp;
 }
 
 inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Object ^ sender, System::Windows::Forms::PaintEventArgs ^ e) 
@@ -231,11 +252,11 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Obje
 
 	if (g_ScrPPalette.index != -1)
 	{
-		bmp->SetPixel(g_ScrPPalette.x, g_ScrPPalette.y, 
+		bmp->SetPixel(g_ScrPPalette.x, g_ScrPPalette.y,
 			System::Drawing::Color::FromArgb(
-				150, 
-				g_ScrPPalette.rgb.R, 
-				g_ScrPPalette.rgb.G, 
+				150,
+				g_ScrPPalette.rgb.R,
+				g_ScrPPalette.rgb.G,
 				g_ScrPPalette.rgb.B)
 		);
 
@@ -428,6 +449,36 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseMove(System::
 				g_ScrPPalette.index = index;
 
 				ctrlPaletteImg->Invalidate();
+			}
+		}
+	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_MouseMove(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 
+{
+	if (static_cast<System::Drawing::Bitmap^>(g_BitmapSprite) != nullptr)
+	{
+		auto bmp = g_BitmapSprite;
+		uint8_t scaleFactor = ctrlSpriteSize->Value;
+		int32_t x = (e->X - 0) / scaleFactor;
+		int32_t y = (e->Y - 0) / scaleFactor;
+
+		if (g_ScrPSprite.x != x || g_ScrPSprite.y != y)
+		{
+			if ((x >= 0) && (x < bmp->Width) && (y >= 0) && (y < bmp->Height))
+			{
+				auto rgb = g_BitmapSprite->GetPixel(x, y);
+				auto index = Palette::FindColorAll({ rgb.R, rgb.G, rgb.B });
+				g_PixelTip->SetToolTip(ctrlSpriteImg2, " ");
+				g_PixelTip->ToolTipTitle = "W: " + x + " H: " + y;
+				g_PixelTip->SetToolTip(ctrlSpriteImg2, "RGB: " + rgb.R + " " + rgb.G + " " + rgb.B + "\nIndex: " + index);
+
+				g_ScrPSprite.x = x;
+				g_ScrPSprite.y = y;
+				g_ScrPSprite.rgb = { rgb.R, rgb.G, rgb.B };
+				g_ScrPSprite.index = index;
+
+				ctrlSpriteImg2->Invalidate();
 			}
 		}
 	}
