@@ -201,13 +201,16 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_Paint(System::Obje
 
 	if (g_ScrPixel.index != -1)
 	{
-		bmp->SetPixel(g_ScrPixel.x, g_ScrPixel.y,
-			System::Drawing::Color::FromArgb(
-				150,
-				g_ScrPixel.rgb.R,
-				g_ScrPixel.rgb.G,
-				g_ScrPixel.rgb.B)
-		);
+		if ((g_ScrPixel.x >= 0) && (g_ScrPixel.x < bmp->Width) && (g_ScrPixel.y >= 0) && (g_ScrPixel.y < bmp->Height))
+		{
+			bmp->SetPixel(g_ScrPixel.x, g_ScrPixel.y,
+				System::Drawing::Color::FromArgb(
+					150,
+					g_ScrPixel.rgb.R,
+					g_ScrPixel.rgb.G,
+					g_ScrPixel.rgb.B)
+			);
+		}
 
 		g_ScrPixel.index = -1;
 	}
@@ -251,13 +254,16 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Obje
 
 	if (g_ScrPixel.index != -1)
 	{
-		bmp->SetPixel(g_ScrPixel.x, g_ScrPixel.y,
-			System::Drawing::Color::FromArgb(
-				150,
-				g_ScrPixel.rgb.R,
-				g_ScrPixel.rgb.G,
-				g_ScrPixel.rgb.B)
-		);
+		if ((g_ScrPixel.x >= 0) && (g_ScrPixel.x < bmp->Width) && (g_ScrPixel.y >= 0) && (g_ScrPixel.y < bmp->Height))
+		{
+			bmp->SetPixel(g_ScrPixel.x, g_ScrPixel.y,
+				System::Drawing::Color::FromArgb(
+					150,
+					g_ScrPixel.rgb.R,
+					g_ScrPixel.rgb.G,
+					g_ScrPixel.rgb.B)
+			);
+		}
 
 		g_ScrPixel.index = -1;
 	}
