@@ -44,8 +44,7 @@ struct ScreenPixel
 	RGB rgb;
 };
 
-ScreenPixel g_ScrPPalette;
-ScreenPixel g_ScrPSprite;
+ScreenPixel g_ScrPixel;
 
 [STAThreadAttribute]
 int main(array<System::String^> ^args)
@@ -115,9 +114,9 @@ inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChan
 	if (ctrlListSprites->SelectedItems->Count == 0)
 		return;
 
-	g_ScrPSprite.index = -1;
-	g_ScrPSprite.x = 0;
-	g_ScrPSprite.y = 0;
+	g_ScrPixel.index = -1;
+	g_ScrPixel.x = 0;
+	g_ScrPixel.y = 0;
 
 	uint16_t selectedIndex = ctrlListSprites->FocusedItem->Index;
 	g_Sprite.MapSprite(selectedIndex);
@@ -200,17 +199,17 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_Paint(System::Obje
 	uint8_t scaleFactor = ctrlSpriteSize->Value;
 	ctrlSpriteImg2->Size = System::Drawing::Size(bmp->Width * scaleFactor, bmp->Height * scaleFactor);
 
-	if (g_ScrPSprite.index != -1)
+	if (g_ScrPixel.index != -1)
 	{
-		bmp->SetPixel(g_ScrPSprite.x, g_ScrPSprite.y,
+		bmp->SetPixel(g_ScrPixel.x, g_ScrPixel.y,
 			System::Drawing::Color::FromArgb(
 				150,
-				g_ScrPSprite.rgb.R,
-				g_ScrPSprite.rgb.G,
-				g_ScrPSprite.rgb.B)
+				g_ScrPixel.rgb.R,
+				g_ScrPixel.rgb.G,
+				g_ScrPixel.rgb.B)
 		);
 
-		g_ScrPSprite.index = -1;
+		g_ScrPixel.index = -1;
 	}
 
 	auto g = e->Graphics;
@@ -250,17 +249,17 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Obje
 	double scaleY = (double)ctrlPaletteImg->Height / (double)bmp->Width;
 	double scaleFactor = scaleX < scaleY ? scaleX : scaleY;
 
-	if (g_ScrPPalette.index != -1)
+	if (g_ScrPixel.index != -1)
 	{
-		bmp->SetPixel(g_ScrPPalette.x, g_ScrPPalette.y,
+		bmp->SetPixel(g_ScrPixel.x, g_ScrPixel.y,
 			System::Drawing::Color::FromArgb(
 				150,
-				g_ScrPPalette.rgb.R,
-				g_ScrPPalette.rgb.G,
-				g_ScrPPalette.rgb.B)
+				g_ScrPixel.rgb.R,
+				g_ScrPixel.rgb.G,
+				g_ScrPixel.rgb.B)
 		);
 
-		g_ScrPPalette.index = -1;
+		g_ScrPixel.index = -1;
 	}
 
 	g->DrawImage(bmp, static_cast<int32_t>((ctrlPaletteImg->Width - (bmp->Width * scaleFactor)) / 2),
@@ -433,7 +432,7 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseMove(System::
 		x = (e->X - x) / scaleFactor;
 		y = (e->Y - y) / scaleFactor;
 
-		if (g_ScrPPalette.x != x || g_ScrPPalette.y != y)
+		if (g_ScrPixel.x != x || g_ScrPixel.y != y)
 		{
 			if ((x >= 0) && (x < bmp->Width) && (y >= 0) && (y < bmp->Height))
 			{
@@ -443,10 +442,10 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseMove(System::
 				g_PixelTip->ToolTipTitle = "W: " + x + " H: " + y;
 				g_PixelTip->SetToolTip(ctrlPaletteImg, "RGB: " + rgb.R + " " + rgb.G + " " + rgb.B + "\nIndex: " + index);
 
-				g_ScrPPalette.x = x;
-				g_ScrPPalette.y = y;
-				g_ScrPPalette.rgb = { rgb.R, rgb.G, rgb.B };
-				g_ScrPPalette.index = index;
+				g_ScrPixel.x = x;
+				g_ScrPixel.y = y;
+				g_ScrPixel.rgb = { rgb.R, rgb.G, rgb.B };
+				g_ScrPixel.index = index;
 
 				ctrlPaletteImg->Invalidate();
 			}
@@ -463,7 +462,7 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_MouseMove(System::
 		int32_t x = (e->X - 0) / scaleFactor;
 		int32_t y = (e->Y - 0) / scaleFactor;
 
-		if (g_ScrPSprite.x != x || g_ScrPSprite.y != y)
+		if (g_ScrPixel.x != x || g_ScrPixel.y != y)
 		{
 			if ((x >= 0) && (x < bmp->Width) && (y >= 0) && (y < bmp->Height))
 			{
@@ -473,13 +472,41 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_MouseMove(System::
 				g_PixelTip->ToolTipTitle = "W: " + x + " H: " + y;
 				g_PixelTip->SetToolTip(ctrlSpriteImg2, "RGB: " + rgb.R + " " + rgb.G + " " + rgb.B + "\nIndex: " + index);
 
-				g_ScrPSprite.x = x;
-				g_ScrPSprite.y = y;
-				g_ScrPSprite.rgb = { rgb.R, rgb.G, rgb.B };
-				g_ScrPSprite.index = index;
+				g_ScrPixel.x = x;
+				g_ScrPixel.y = y;
+				g_ScrPixel.rgb = { rgb.R, rgb.G, rgb.B };
+				g_ScrPixel.index = index;
 
 				ctrlSpriteImg2->Invalidate();
 			}
+		}
+	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseDown(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 
+{
+	if (e->Button == System::Windows::Forms::MouseButtons::Right)
+	{
+		//if (ctrlPaletteImg->Bounds.Contains(e->Location))
+		if (g_ScrPixel.index != -1)
+		{
+			ctrlTooltipContext->Show(Cursor->Position);
+		}
+	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::copyRGBToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	System::Windows::Forms::Clipboard::SetText(g_ScrPixel.rgb.R.ToString() + ", " + g_ScrPixel.rgb.G.ToString() + ", " + g_ScrPixel.rgb.B.ToString());
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_MouseDown(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 
+{
+	if (e->Button == System::Windows::Forms::MouseButtons::Right)
+	{
+		if (g_ScrPixel.index != -1)
+		{
+			ctrlTooltipContext->Show(Cursor->Position);
 		}
 	}
 }

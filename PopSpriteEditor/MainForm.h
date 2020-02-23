@@ -81,6 +81,9 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::ToolStripMenuItem^  CopyOffset;
 	private: System::Windows::Forms::ToolStripMenuItem^  colorKeyToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripTextBox^  toolStripTextBox1;
+	private: System::Windows::Forms::ContextMenuStrip^  ctrlTooltipContext;
+
+	private: System::Windows::Forms::ToolStripMenuItem^  copyRGBToolStripMenuItem;
 
 
 
@@ -137,6 +140,8 @@ namespace PopSpriteEditor {
 			this->ctrlPaletteImg = (gcnew System::Windows::Forms::PictureBox());
 			this->ctrlListSpritesContext = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->CopyOffset = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->ctrlTooltipContext = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->copyRGBToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->ctrlGroupBoxSelect->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlNumericGoto))->BeginInit();
@@ -147,6 +152,7 @@ namespace PopSpriteEditor {
 			this->groupBox2->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlPaletteImg))->BeginInit();
 			this->ctrlListSpritesContext->SuspendLayout();
+			this->ctrlTooltipContext->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// ctrlListSprites
@@ -434,6 +440,7 @@ namespace PopSpriteEditor {
 			this->ctrlSpriteImg2->TabIndex = 0;
 			this->ctrlSpriteImg2->TabStop = false;
 			this->ctrlSpriteImg2->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::ctrlSpriteImg2_Paint);
+			this->ctrlSpriteImg2->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::ctrlSpriteImg2_MouseDown);
 			this->ctrlSpriteImg2->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::ctrlSpriteImg2_MouseMove);
 			// 
 			// groupBox2
@@ -457,6 +464,7 @@ namespace PopSpriteEditor {
 			this->ctrlPaletteImg->TabIndex = 6;
 			this->ctrlPaletteImg->TabStop = false;
 			this->ctrlPaletteImg->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::ctrlPaletteImg_Paint);
+			this->ctrlPaletteImg->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::ctrlPaletteImg_MouseDown);
 			this->ctrlPaletteImg->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::ctrlPaletteImg_MouseMove);
 			// 
 			// ctrlListSpritesContext
@@ -471,6 +479,19 @@ namespace PopSpriteEditor {
 			this->CopyOffset->Size = System::Drawing::Size(137, 22);
 			this->CopyOffset->Text = L"Copy Offset";
 			this->CopyOffset->Click += gcnew System::EventHandler(this, &MainForm::CopyOffset_Click);
+			// 
+			// ctrlTooltipContext
+			// 
+			this->ctrlTooltipContext->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->copyRGBToolStripMenuItem });
+			this->ctrlTooltipContext->Name = L"ctrlListSpritesContext";
+			this->ctrlTooltipContext->Size = System::Drawing::Size(128, 26);
+			// 
+			// copyRGBToolStripMenuItem
+			// 
+			this->copyRGBToolStripMenuItem->Name = L"copyRGBToolStripMenuItem";
+			this->copyRGBToolStripMenuItem->Size = System::Drawing::Size(127, 22);
+			this->copyRGBToolStripMenuItem->Text = L"Copy RGB";
+			this->copyRGBToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::copyRGBToolStripMenuItem_Click);
 			// 
 			// MainForm
 			// 
@@ -499,6 +520,7 @@ namespace PopSpriteEditor {
 			this->groupBox2->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlPaletteImg))->EndInit();
 			this->ctrlListSpritesContext->ResumeLayout(false);
+			this->ctrlTooltipContext->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -525,6 +547,9 @@ private: System::Void toolStripTextBox1_KeyPress(System::Object^  sender, System
 private: System::Void toolStripTextBox1_TextChanged(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlPaletteImg_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 private: System::Void ctrlSpriteImg2_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+private: System::Void ctrlPaletteImg_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+private: System::Void copyRGBToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void ctrlSpriteImg2_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed
