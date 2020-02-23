@@ -510,3 +510,8 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_MouseDown(System::
 		}
 	}
 }
+
+inline System::Void PopSpriteEditor::MainForm::exportPaletteToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	Palette::Save(g_Palette);
+}

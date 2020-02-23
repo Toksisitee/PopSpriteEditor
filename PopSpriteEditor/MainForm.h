@@ -84,6 +84,7 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::ContextMenuStrip^  ctrlTooltipContext;
 
 	private: System::Windows::Forms::ToolStripMenuItem^  copyRGBToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  exportPaletteToolStripMenuItem;
 
 
 
@@ -142,6 +143,7 @@ namespace PopSpriteEditor {
 			this->CopyOffset = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ctrlTooltipContext = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->copyRGBToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->exportPaletteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->ctrlGroupBoxSelect->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlNumericGoto))->BeginInit();
@@ -208,9 +210,9 @@ namespace PopSpriteEditor {
 			// 
 			// fileToolStripMenuItem
 			// 
-			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
 				this->openToolStripMenuItem,
-					this->createSpriteBankToolStripMenuItem, this->dumpSpritesToolStripMenuItem
+					this->createSpriteBankToolStripMenuItem, this->dumpSpritesToolStripMenuItem, this->exportPaletteToolStripMenuItem
 			});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
@@ -219,7 +221,7 @@ namespace PopSpriteEditor {
 			// openToolStripMenuItem
 			// 
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(170, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::openToolStripMenuItem_Click);
 			// 
@@ -230,7 +232,7 @@ namespace PopSpriteEditor {
 					this->imagesToolStripMenuItem
 			});
 			this->createSpriteBankToolStripMenuItem->Name = L"createSpriteBankToolStripMenuItem";
-			this->createSpriteBankToolStripMenuItem->Size = System::Drawing::Size(170, 22);
+			this->createSpriteBankToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->createSpriteBankToolStripMenuItem->Text = L"Create Sprite Bank";
 			// 
 			// memoryToolStripMenuItem
@@ -250,7 +252,7 @@ namespace PopSpriteEditor {
 			// dumpSpritesToolStripMenuItem
 			// 
 			this->dumpSpritesToolStripMenuItem->Name = L"dumpSpritesToolStripMenuItem";
-			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(170, 22);
+			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->dumpSpritesToolStripMenuItem->Text = L"Export Sprites";
 			this->dumpSpritesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::dumpSpritesToolStripMenuItem_Click);
 			// 
@@ -493,6 +495,13 @@ namespace PopSpriteEditor {
 			this->copyRGBToolStripMenuItem->Text = L"Copy RGB";
 			this->copyRGBToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::copyRGBToolStripMenuItem_Click);
 			// 
+			// exportPaletteToolStripMenuItem
+			// 
+			this->exportPaletteToolStripMenuItem->Name = L"exportPaletteToolStripMenuItem";
+			this->exportPaletteToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->exportPaletteToolStripMenuItem->Text = L"Export Palette";
+			this->exportPaletteToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exportPaletteToolStripMenuItem_Click);
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -550,6 +559,7 @@ private: System::Void ctrlSpriteImg2_MouseMove(System::Object^  sender, System::
 private: System::Void ctrlPaletteImg_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 private: System::Void copyRGBToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlSpriteImg2_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+private: System::Void exportPaletteToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed
