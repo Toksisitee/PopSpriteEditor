@@ -714,6 +714,14 @@ inline System::Void PopSpriteEditor::MainForm::MainForm_KeyDown(System::Object ^
 			ctrlSpriteImg2->Invalidate();
 		}
 	}
+	else if (e->KeyCode == Keys::B)
+	{
+		ctrlBtnPaint_Click(nullptr, nullptr);
+	}
+	else if (e->KeyCode == Keys::Y)
+	{
+		ctrlBtnColorPick_Click(nullptr, nullptr);
+	}
 }
 
 inline System::Void PopSpriteEditor::MainForm::ctrlBtnPaint_Click(System::Object ^ sender, System::EventArgs ^ e)
