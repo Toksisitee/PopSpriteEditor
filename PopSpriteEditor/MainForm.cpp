@@ -30,19 +30,40 @@ using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::IO;
 
+struct ScreenPixel
+{
+	int32_t x;
+	int32_t y;
+	uint8_t palIndex;
+	RGB rgb;
+	bool processed;
+};
+
+struct EditBuffer
+{
+	int32_t x;
+	int32_t y;
+	uint16_t sprIndex;
+	uint8_t palIndex;
+};
+
+struct Editor
+{
+	uint8_t Mode = EDITOR_MODE_NORMAL;
+	uint8_t ColorIndex = 255;
+	uint8_t ColorIndex2 = 255;
+	
+};
+
 CSprite g_Sprite;
 gcroot<System::String^> g_InitialDirectory = nullptr;
 gcroot<ToolTip^> g_PixelTip = nullptr;
 gcroot<System::Drawing::Bitmap^> g_BitmapPalette = nullptr;
 gcroot<System::Drawing::Bitmap^> g_BitmapSprite = nullptr;
 
-struct ScreenPixel
-{
-	int32_t x;
-	int32_t y;
-	uint16_t index;
-	RGB rgb;
-};
+Editor g_Editor;
+std::vector<EditBuffer> g_EditUndo;
+std::vector<EditBuffer>	g_EditRedo;
 
 ScreenPixel g_ScrPixel;
 
@@ -66,6 +87,70 @@ int main(array<System::String^> ^args)
 	PopSpriteEditor::GlobalForms::MainWindow = gcnew PopSpriteEditor::MainForm();
 	Application::Run(PopSpriteEditor::GlobalForms::MainWindow);
 	return 0;
+}
+
+bool OnMouseLeftRight(System::Windows::Forms::MouseEventArgs ^ e)
+{
+	if (e->Button == System::Windows::Forms::MouseButtons::Left ||
+		e->Button == System::Windows::Forms::MouseButtons::Right)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+System::Void PopSpriteEditor::MainForm::OnEditorButtonReset()
+{
+	ctrlBtnPaint->FlatAppearance->BorderColor = Color::Black;
+	ctrlBtnCursor->FlatAppearance->BorderColor = Color::Black;
+	ctrlBtnColorPick->FlatAppearance->BorderColor = Color::Black;
+}
+
+void OnSpritePaint(uint16_t sprIndex, bool mainSlot)
+{
+	if (g_Editor.Mode == EDITOR_MODE_PAINT)
+	{
+		if (g_EditUndo.size() >= EDITOR_MAX_BUFFER)
+		{
+			g_EditUndo.erase(g_EditUndo.begin());
+		}
+
+		auto clrIndex = mainSlot == true ? g_Editor.ColorIndex : g_Editor.ColorIndex2;
+		uint8_t pal = g_Sprite.SprBank.Data[sprIndex].Map[g_ScrPixel.x][g_ScrPixel.y];
+		g_EditUndo.push_back({ g_ScrPixel.x, g_ScrPixel.y, sprIndex, pal });
+		g_Sprite.SprBank.Data[sprIndex].Map[g_ScrPixel.x][g_ScrPixel.y] = clrIndex;
+	}
+}
+
+void OnColorSelect(bool mainSlot)
+{
+	PictureBox^ box;
+	auto slot = mainSlot == true ? &g_Editor.ColorIndex : &g_Editor.ColorIndex2;
+	*slot = g_ScrPixel.palIndex;
+
+	if (mainSlot)
+		box = PopSpriteEditor::GlobalForms::MainWindow->ctrlPaintColor;
+	else 
+		box = PopSpriteEditor::GlobalForms::MainWindow->ctrlPaintColor2;
+
+	box->BackColor = System::Drawing::Color::FromArgb(
+			255,
+			g_Palette[*slot].R,
+			g_Palette[*slot].G,
+			g_Palette[*slot].B
+		);
+}
+
+void HexEditorAppend(System::String^ text, System::Drawing::Color color)
+{
+	auto editor = PopSpriteEditor::GlobalForms::MainWindow->ctrlHexView;
+	editor->SelectionStart = editor->TextLength;
+	editor->SelectionLength = 0;
+	editor->SelectionColor = color;
+	editor->AppendText(text);
+	editor->SelectionColor = editor->ForeColor;
+	editor->MaxLength = editor->TextLength;
 }
 
 inline System::Void PopSpriteEditor::MainForm::openToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
@@ -98,23 +183,13 @@ inline System::Void PopSpriteEditor::MainForm::openToolStripMenuItem_Click(Syste
 	}
 }
 
-void HexEditorAppend(System::String^ text, System::Drawing::Color color)
-{
-	auto editor = PopSpriteEditor::GlobalForms::MainWindow->ctrlHexView;
-	editor->SelectionStart = editor->TextLength;
-	editor->SelectionLength = 0;
-	editor->SelectionColor = color;
-	editor->AppendText(text);
-	editor->SelectionColor = editor->ForeColor;
-	editor->MaxLength = editor->TextLength;
-}
-
 inline System::Void PopSpriteEditor::MainForm::ctrlListSprites_SelectedIndexChanged(System::Object ^ sender, System::EventArgs ^ e) 
 {
 	if (ctrlListSprites->SelectedItems->Count == 0)
 		return;
 
-	g_ScrPixel.index = -1;
+	g_EditUndo.clear();
+	g_ScrPixel.processed = true;
 	g_ScrPixel.x = 0;
 	g_ScrPixel.y = 0;
 
@@ -199,20 +274,27 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_Paint(System::Obje
 	uint8_t scaleFactor = ctrlSpriteSize->Value;
 	ctrlSpriteImg2->Size = System::Drawing::Size(bmp->Width * scaleFactor, bmp->Height * scaleFactor);
 
-	if (g_ScrPixel.index != -1)
+
+	if (g_ScrPixel.processed != true)
 	{
 		if ((g_ScrPixel.x >= 0) && (g_ScrPixel.x < bmp->Width) && (g_ScrPixel.y >= 0) && (g_ScrPixel.y < bmp->Height))
 		{
+			auto rgb = g_ScrPixel.rgb;
+			uint8_t alpha = 150;
+
+			if (g_Editor.Mode == EDITOR_MODE_PAINT)
+			{
+				rgb = g_Palette[g_Editor.ColorIndex];
+				alpha = 255;
+			}
+
 			bmp->SetPixel(g_ScrPixel.x, g_ScrPixel.y,
 				System::Drawing::Color::FromArgb(
-					150,
-					g_ScrPixel.rgb.R,
-					g_ScrPixel.rgb.G,
-					g_ScrPixel.rgb.B)
+					alpha, rgb.R, rgb.G, rgb.B)
 			);
 		}
 
-		g_ScrPixel.index = -1;
+		g_ScrPixel.processed = true;
 	}
 
 	auto g = e->Graphics;
@@ -252,7 +334,7 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Obje
 	double scaleY = (double)ctrlPaletteImg->Height / (double)bmp->Width;
 	double scaleFactor = scaleX < scaleY ? scaleX : scaleY;
 
-	if (g_ScrPixel.index != -1)
+	if (g_ScrPixel.processed != true)
 	{
 		if ((g_ScrPixel.x >= 0) && (g_ScrPixel.x < bmp->Width) && (g_ScrPixel.y >= 0) && (g_ScrPixel.y < bmp->Height))
 		{
@@ -265,7 +347,7 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_Paint(System::Obje
 			);
 		}
 
-		g_ScrPixel.index = -1;
+		g_ScrPixel.processed = true;
 	}
 
 	g->DrawImage(bmp, static_cast<int32_t>((ctrlPaletteImg->Width - (bmp->Width * scaleFactor)) / 2),
@@ -282,9 +364,12 @@ inline System::Void PopSpriteEditor::MainForm::MainForm_Load(System::Object ^ se
 	ctrlSpriteImg->BackColor = Color::White;
 	ctrlSpriteImg2->BackColor = Color::White;
 	ctrlPaletteImg->BackColor = Color::White;
+	ctrlPaintColor->BackColor = Color::Fuchsia;
+	ctrlPaintColor2->BackColor = Color::Fuchsia;
 	debugDataToolStripMenuItem_CheckedChanged(nullptr, nullptr);
 	g_PixelTip = gcnew ToolTip();
 	g_PixelTip->ShowAlways = true;
+
 }
 
 inline System::Void PopSpriteEditor::MainForm::ctrlSpriteSize_ValueChanged(System::Object ^ sender, System::EventArgs ^ e) 
@@ -451,7 +536,19 @@ inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseMove(System::
 				g_ScrPixel.x = x;
 				g_ScrPixel.y = y;
 				g_ScrPixel.rgb = { rgb.R, rgb.G, rgb.B };
-				g_ScrPixel.index = index;
+				g_ScrPixel.palIndex = index;
+				g_ScrPixel.processed = false;
+
+
+				if (g_Editor.Mode == EDITOR_MODE_PAINT || 
+					g_Editor.Mode == EDITOR_MODE_COLOR_PICK)
+				{
+					if (OnMouseLeftRight(e))
+					{
+						bool mainSlot = e->Button == System::Windows::Forms::MouseButtons::Left ? true : false;
+						OnColorSelect(mainSlot);
+					}
+				}
 
 				ctrlPaletteImg->Invalidate();
 			}
@@ -481,7 +578,17 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_MouseMove(System::
 				g_ScrPixel.x = x;
 				g_ScrPixel.y = y;
 				g_ScrPixel.rgb = { rgb.R, rgb.G, rgb.B };
-				g_ScrPixel.index = index;
+				g_ScrPixel.palIndex = index;
+				g_ScrPixel.processed = false;
+
+				if (ctrlListSprites->SelectedItems->Count != 0)
+				{
+					if (OnMouseLeftRight(e))
+					{
+						bool mainSlot = e->Button == System::Windows::Forms::MouseButtons::Left ? true : false;
+						OnSpritePaint(ctrlListSprites->FocusedItem->Index, mainSlot);
+					}
+				}
 
 				ctrlSpriteImg2->Invalidate();
 			}
@@ -491,12 +598,20 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_MouseMove(System::
 
 inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseDown(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 
 {
-	if (e->Button == System::Windows::Forms::MouseButtons::Right)
+	if (g_Editor.Mode == EDITOR_MODE_NORMAL)
 	{
-		//if (ctrlPaletteImg->Bounds.Contains(e->Location))
-		if (g_ScrPixel.index != -1)
+		if (g_ScrPixel.palIndex != -1)
 		{
 			ctrlTooltipContext->Show(Cursor->Position);
+		}
+	}
+	else if (g_Editor.Mode == EDITOR_MODE_PAINT ||
+		g_Editor.Mode == EDITOR_MODE_COLOR_PICK)
+	{
+		if (OnMouseLeftRight(e))
+		{
+			bool mainSlot = e->Button == System::Windows::Forms::MouseButtons::Left ? true : false;
+			OnColorSelect(mainSlot);
 		}
 	}
 }
@@ -508,11 +623,33 @@ inline System::Void PopSpriteEditor::MainForm::copyRGBToolStripMenuItem_Click(Sy
 
 inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_MouseDown(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 
 {
-	if (e->Button == System::Windows::Forms::MouseButtons::Right)
+	if (g_Editor.Mode == EDITOR_MODE_NORMAL)
 	{
-		if (g_ScrPixel.index != -1)
+		if (e->Button == System::Windows::Forms::MouseButtons::Right)
 		{
-			ctrlTooltipContext->Show(Cursor->Position);
+			if (g_ScrPixel.palIndex != -1)
+			{
+				ctrlTooltipContext->Show(Cursor->Position);
+			}
+		}
+	}
+	else if (g_Editor.Mode == EDITOR_MODE_PAINT)
+	{
+		if (ctrlListSprites->SelectedItems->Count != 0)
+		{
+			if (OnMouseLeftRight(e))
+			{
+				bool mainSlot = e->Button == System::Windows::Forms::MouseButtons::Left ? true : false;
+				OnSpritePaint(ctrlListSprites->FocusedItem->Index, mainSlot);
+			}
+		}
+	}
+	else if (g_Editor.Mode == EDITOR_MODE_COLOR_PICK)
+	{
+		if (OnMouseLeftRight(e))
+		{
+			bool mainSlot = e->Button == System::Windows::Forms::MouseButtons::Left ? true : false;
+			OnColorSelect(mainSlot);
 		}
 	}
 }
@@ -521,3 +658,89 @@ inline System::Void PopSpriteEditor::MainForm::exportPaletteToolStripMenuItem_Cl
 {
 	Palette::Save(g_Palette);
 }
+
+inline System::Void PopSpriteEditor::MainForm::MainForm_KeyDown(System::Object ^ sender, System::Windows::Forms::KeyEventArgs ^ e) 
+{
+	if ((e->Control) && e->KeyCode == Keys::Z)
+	{
+		if (g_EditUndo.size() > 0)
+		{
+			if (ctrlListSprites->SelectedItems->Count == 0)
+				return;
+
+			auto buffer = g_EditUndo.back();
+			EditBuffer buf;
+			buf.palIndex = g_Sprite.SprBank.Data[buffer.sprIndex].Map[buffer.x][buffer.y];
+			buf.sprIndex = buffer.sprIndex;
+			buf.x = buffer.x;
+			buf.y = buffer.y;
+			g_EditRedo.push_back(buf);
+
+			if (g_EditRedo.size() >= EDITOR_MAX_BUFFER)
+			{
+				g_EditRedo.erase(g_EditRedo.begin());
+			}
+
+			g_Sprite.SprBank.Data[buffer.sprIndex].Map[buffer.x][buffer.y] = buffer.palIndex;
+			g_EditUndo.pop_back();
+
+			ctrlSpriteImg2->Invalidate();
+		}
+	}
+	else if ((e->Control) && e->KeyCode == Keys::Y)
+	{
+		if (g_EditRedo.size() > 0)
+		{
+			if (ctrlListSprites->SelectedItems->Count == 0)
+				return;
+
+			auto buffer = g_EditRedo.back();
+
+			EditBuffer buf;
+			buf.palIndex = g_Sprite.SprBank.Data[buffer.sprIndex].Map[buffer.x][buffer.y];
+			buf.sprIndex = buffer.sprIndex;
+			buf.x = buffer.x;
+			buf.y = buffer.y;
+			g_EditUndo.push_back(buf);
+
+			if (g_EditUndo.size() >= EDITOR_MAX_BUFFER)
+			{
+				g_EditUndo.erase(g_EditUndo.begin());
+			}
+
+			g_Sprite.SprBank.Data[buffer.sprIndex].Map[buffer.x][buffer.y] = buffer.palIndex;
+			g_EditRedo.pop_back();
+
+			ctrlSpriteImg2->Invalidate();
+		}
+	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlBtnPaint_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	OnEditorButtonReset();
+	g_Editor.Mode = EDITOR_MODE_PAINT;
+	ctrlPaletteImg->Cursor = Cursors::Hand;
+	ctrlSpriteImg2->Cursor = Cursors::Hand;
+	ctrlBtnPaint->FlatAppearance->BorderColor = Color::Red;
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlBtnCursor_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	OnEditorButtonReset();
+	g_Editor.Mode = EDITOR_MODE_NORMAL;
+	Cursor->Current = Cursors::Arrow;
+	ctrlPaletteImg->Cursor = Cursors::Arrow;
+	ctrlSpriteImg2->Cursor = Cursors::Arrow;
+	ctrlBtnCursor->FlatAppearance->BorderColor = Color::Red;
+}
+
+inline System::Void PopSpriteEditor::MainForm::ctrlBtnColorPick_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	OnEditorButtonReset();
+	g_Editor.Mode = EDITOR_MODE_COLOR_PICK;
+	ctrlPaletteImg->Cursor = Cursors::Cross;
+	ctrlSpriteImg2->Cursor = Cursors::Cross;
+	ctrlBtnColorPick->FlatAppearance->BorderColor = Color::Red;
+}
+
