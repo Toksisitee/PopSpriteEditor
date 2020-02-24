@@ -117,6 +117,7 @@ namespace PopSpriteEditor {
 			// 
 			this->ctrlAboutRichText->Location = System::Drawing::Point(12, 307);
 			this->ctrlAboutRichText->Name = L"ctrlAboutRichText";
+			this->ctrlAboutRichText->ReadOnly = true;
 			this->ctrlAboutRichText->Size = System::Drawing::Size(380, 142);
 			this->ctrlAboutRichText->TabIndex = 6;
 			this->ctrlAboutRichText->Text = L"";
