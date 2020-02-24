@@ -146,10 +146,11 @@ void CSprite::SaveSprite(uint16_t index)
 
 	MapSprite(index);
 	
-	for (uint8_t x = 0; x < SprBank.Data[index].Sprite.Width; x++)
+	for (uint16_t x = 0; x < SprBank.Data[index].Sprite.Width; x++)
 	{
-		for (uint8_t y = 0; y < SprBank.Data[index].Sprite.Height; y++)
+		for (uint16_t y = 0; y < SprBank.Data[index].Sprite.Height; y++)
 		{
+			//printf("(%i,%i)x: %i, y: %i\n", SprBank.Data[palIndex].Sprite.Width, SprBank.Data[palIndex].Sprite.Height, x, y);
 			pal_idx = SprBank.Data[index].Map[x][y];
 
 			if (Palette::IndexIsColorKey(pal_idx))
@@ -175,9 +176,9 @@ System::Drawing::Bitmap^ CSprite::getSpriteBitmapHandle(uint16_t index)
 	auto bmp = gcnew System::Drawing::Bitmap(sprw, sprh);
 	MapSprite(index);
 
-	for (uint8_t x = 0; x < sprw; x++)
+	for (uint16_t x = 0; x < sprw; x++)
 	{
-		for (uint8_t y = 0; y < sprh; y++)
+		for (uint16_t y = 0; y < sprh; y++)
 		{
 			pal_idx = SprBank.Data[index].Map[x][y];
 
