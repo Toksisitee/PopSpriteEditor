@@ -13,6 +13,20 @@ Open source Sprite Viewer &amp; Editor tool written in C++/CLI for the game **Po
 - Color Palette:
   - Preview color palette.
   - Adjustable color key.
+- Pixel Inspector; hover over an image and a tooltip will appear showing the highlighted pixel's values:
+	- Position (current width & height).
+	- RGB values.
+	- Index in the color palette.
+	- Right click to copy RGB values.
+- Basic editing functionality:
+	- 2 color slots (right/left click).
+	- Brush mode; paint individual pixels (r/l click).
+	- Color pick mode; copy RGB values from highlighted pixel (r/l click).
+	- ``CTRL + Z`` (undo).
+	- ``CTRL + Y`` (redo).
+	- Key ``B`` (brush mode).
+	- Key ``Y`` (color pick mode).
+- Export color palette to bitmap format (``File`` -> ``Export Palette``).
   
 ### Usage
 Usage is straight forward. The numbering (names) of the bitmaps is the order they'll be saved in, and any gaps in the numbering isn't a problem as the editor will renumber the files internally. Files that aren't bitmaps or bitmaps with letters in the name will be ignored.
