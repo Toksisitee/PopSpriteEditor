@@ -250,28 +250,28 @@ namespace PopSpriteEditor {
 			// openToolStripMenuItem
 			// 
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(146, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::openToolStripMenuItem_Click);
 			// 
 			// saveToolStripMenuItem
 			// 
 			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
-			this->saveToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(146, 22);
 			this->saveToolStripMenuItem->Text = L"Save";
 			this->saveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveToolStripMenuItem_Click);
 			// 
 			// createToolStripMenuItem
 			// 
 			this->createToolStripMenuItem->Name = L"createToolStripMenuItem";
-			this->createToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->createToolStripMenuItem->Size = System::Drawing::Size(146, 22);
 			this->createToolStripMenuItem->Text = L"Create";
 			this->createToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::createToolStripMenuItem_Click);
 			// 
 			// dumpSpritesToolStripMenuItem
 			// 
 			this->dumpSpritesToolStripMenuItem->Name = L"dumpSpritesToolStripMenuItem";
-			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(146, 22);
 			this->dumpSpritesToolStripMenuItem->Text = L"Export Sprites";
 			this->dumpSpritesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::dumpSpritesToolStripMenuItem_Click);
 			// 
@@ -537,7 +537,7 @@ namespace PopSpriteEditor {
 			this->groupBox1->Size = System::Drawing::Size(296, 431);
 			this->groupBox1->TabIndex = 7;
 			this->groupBox1->TabStop = false;
-			this->groupBox1->Text = L"Preview";
+			this->groupBox1->Text = L"Editor";
 			// 
 			// ctrlSpriteImg2
 			// 

@@ -216,6 +216,8 @@ namespace PopSpriteEditor {
 			this->Controls->Add(this->ctrlSheetExtract);
 			this->Controls->Add(this->ctrlCreateSheet);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+			this->MaximumSize = System::Drawing::Size(383, 224);
+			this->MinimumSize = System::Drawing::Size(383, 224);
 			this->Name = L"SheetForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Sprite Sheet Manager";

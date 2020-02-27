@@ -23,3 +23,34 @@ struct Vector2
 	int32_t x = 0;
 	int32_t y = 0;
 };
+
+struct RGB
+{
+	uint8_t R;
+	uint8_t G;
+	uint8_t B;
+};
+
+struct ScreenPixel
+{
+	int32_t x;
+	int32_t y;
+	uint8_t palIndex;
+	RGB rgb;
+	bool processed;
+};
+
+struct EditBuffer
+{
+	int32_t x;
+	int32_t y;
+	uint16_t sprIndex;
+	uint8_t palIndex;
+};
+
+struct Editor
+{
+	uint8_t Mode = EDITOR_MODE_NORMAL;
+	uint8_t ColorIndex = 255;
+	uint8_t ColorIndex2 = 255;
+};

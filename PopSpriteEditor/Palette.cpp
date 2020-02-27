@@ -25,7 +25,7 @@ RGB g_Palette[256];
 
 uint8_t Palette::ColorKeys[3] = { 255, 0, 255 };
 
-void Palette::Save(RGB* Palette)
+void Palette::Save(RGB* palette)
 {
 	BMP pal;
 	pal.SetSize(16, 16);
@@ -36,7 +36,7 @@ void Palette::Save(RGB* Palette)
 	{
 		for (uint32_t x = 0; x < pal.TellWidth(); x++)
 		{
-			pal.SetPixel(x, y, { Palette[index].B, Palette[index].G, Palette[index].R, 0 });
+			pal.SetPixel(x, y, { palette[index].B, palette[index].G, palette[index].R, 0 });
 			index++;
 		}
 	}

@@ -1,15 +1,9 @@
 #pragma once
-
-struct RGB
-{
-	uint8_t R;
-	uint8_t G;
-	uint8_t B;
-};
+#include "Editor.h"
 
 namespace Palette
 {
-	extern void Save(RGB* Palette);
+	extern void Save(RGB* palette);
 	extern void Load(std::string& file);
 	extern uint8_t FindClosestColor(RGB rgb);
 	extern uint8_t FindColor(RGB rgb, bool closest = false);

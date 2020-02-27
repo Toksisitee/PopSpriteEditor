@@ -31,30 +31,6 @@ using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::IO;
 
-struct ScreenPixel
-{
-	int32_t x;
-	int32_t y;
-	uint8_t palIndex;
-	RGB rgb;
-	bool processed;
-};
-
-struct EditBuffer
-{
-	int32_t x;
-	int32_t y;
-	uint16_t sprIndex;
-	uint8_t palIndex;
-};
-
-struct Editor
-{
-	uint8_t Mode = EDITOR_MODE_NORMAL;
-	uint8_t ColorIndex = 255;
-	uint8_t ColorIndex2 = 255;
-};
-
 gcroot<System::String^> g_InitialDirectory = nullptr;
 gcroot<ToolTip^> g_PixelTip = nullptr;
 gcroot<System::Drawing::Bitmap^> g_BitmapPalette = nullptr;
