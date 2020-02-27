@@ -1,24 +1,31 @@
+<img align="left" width="100" height="100" src="https://i.imgur.com/IlTprgN.png">  
+
 # PopSpriteEditor
 Open source Sprite Viewer &amp; Editor tool written in C++/CLI for the game **Populous: The Beginning**.
 
+<p align="center">
+ <img width="800" height="600" src="https://i.imgur.com/XMEdjnT.png"></img>
+</p>
+
 ### Features
-- Open banks:
+- **Open banks**:
   - Preview scaled sprites (slider) with nearest-neighbor interpolation.
   - Export sprites as bitmaps (individually or in bulk).
   - View offset, index, width, height and raw data of each sprite.
-- Create banks:
+- **Create banks**:
   - From bitmaps of any width & height.
   - Append or insert to an "existing" bank.
   - Modify original sprites width & height.
-- Color Palette:
+- **Color Palette**:
   - Preview color palette.
   - Adjustable color key.
-- Pixel Inspector; hover over an image and a tooltip will appear showing the highlighted pixel's values:
+  - Export to bitmap format.
+- **Pixel Inspector**; hover over an image and a tooltip will appear showing the highlighted pixel's values:
 	- Position (current width & height).
 	- RGB values.
 	- Index in the color palette.
 	- Right click to copy RGB values.
-- Basic editing functionality:
+- **Sprite Editor**:
 	- 2 color slots (right/left click).
 	- Brush mode; paint individual pixels (r/l click).
 	- Color pick mode; copy RGB values from highlighted pixel (r/l click).
@@ -26,7 +33,9 @@ Open source Sprite Viewer &amp; Editor tool written in C++/CLI for the game **Po
 	- ``CTRL + Y`` (redo).
 	- Key ``B`` (brush mode).
 	- Key ``Y`` (color pick mode).
-- Export color palette to bitmap format (``File`` -> ``Export Palette``).
+- **Sprite Sheet Manager**:
+	- Generate sheets from frames.
+	- Parse & Split sheets to individual frames.
   
 ### Usage
 Usage is straight forward. The numbering (names) of the bitmaps is the order they'll be saved in, and any gaps in the numbering isn't a problem as the editor will renumber the files internally. Files that aren't bitmaps or bitmaps with letters in the name will be ignored.
@@ -38,6 +47,16 @@ Usage is straight forward. The numbering (names) of the bitmaps is the order the
 6. Modify (resolution and/or colors), delete or add new bitmaps.
 7. Create a new bank from these bitmaps `File` -> `Create Sprite Bank` -> `From Images`.
 8. Replace the original game's sprite bank with the newly created one.
+
+### Sprite Sheets
+A valid sprite sheet has to abide by the following rules:
+* Sprites can't touch corners or edges; ensure there's a space between of at least 1 pixel.
+* New rows have to be separated by a pink continuous line.
+* Background color has to be cyan. (RGB: 0, 255, 255)
+* Color key color has to be pink. (RGB: 255, 0, 255)
+
+An example of a valid sprite sheet:  
+![valid sprite sheet](https://i.imgur.com/TAhdfqI.png)
 
 ### Credits
 [EasyBMP Library](http://easybmp.sourceforge.net/about.html)
