@@ -444,12 +444,10 @@ int32_t CSprite::findSection(const int32_t& offset, BMP& sheet)
 		rgb = sheet.GetPixel(0, y); 
 		if (IsPixelColorKey(rgb))
 		{
-		//	printf("found section at %i\n", y);
 			return y;
 		}
 	}
 
-	//printf("didn't find section\n");
 	return height;
 }
 
@@ -500,19 +498,6 @@ bool CSprite::SheetExtract(const std::string& filePath, const std::string& outpu
 
 					if (y < vR.y || !vR.y)
 						vR.y = y;
-				}
-				else
-				{
-					if ((y - 2) > 0)
-					{
-						if ((IsPixelColorKey(sheet.GetPixel(x, y - 1)) &&
-							IsPixelEmpty(sheet.GetPixel(x, y - 2))) ||
-							(IsPixelColorKey(sheet.GetPixel(x, y - 1)) &&
-							psy == y - 1))
-						{
-							break;
-						}
-					}
 				}
 			}
 
@@ -629,7 +614,7 @@ void CSprite::SheetCreate(const std::string& filePath, const std::string& source
 		sprw = spr->TellWidth();
 		sprh = spr->TellHeight();
 
-		if ((cx + sprw + PAD_X) <= 800)
+		if ((cx + sprw + PAD_X) < 1000)
 		{
 			cx += sprw + PAD_X;
 
@@ -641,13 +626,15 @@ void CSprite::SheetCreate(const std::string& filePath, const std::string& source
 		}
 		else
 		{
-			cx = 0;
+			cx = 1;
 			cy += hh + PAD_Y;
 			hh = 0;
+
+			i--;
 		}
 
 		if ((sprh + cy + PAD_Y) > shy)
-			shy = sprh + cy + PAD_Y;
+			shy = sprh + cy + PAD_Y + 1;
 	}
 
 	printf("Creating sprite sheet (%i sprites) with a size of %ix%i\n", sprs, shw, shy);
@@ -675,7 +662,7 @@ void CSprite::SheetCreate(const std::string& filePath, const std::string& source
 		sprw = spr->TellWidth();
 		sprh = spr->TellHeight();
 
-		if ((cx + sprw + 1) < shw)
+		if ((cx + sprw + PAD_X) < shw)
 		{
 			for (uint32_t x = 0; x < sprw; x++)
 			{
@@ -701,7 +688,7 @@ void CSprite::SheetCreate(const std::string& filePath, const std::string& source
 				sheet.SetPixel(x, cy - (PAD_Y/2), {255, 0, 255, 255});
 			}
 
-			sprs--;
+			i--;
 		}
 	}
 
