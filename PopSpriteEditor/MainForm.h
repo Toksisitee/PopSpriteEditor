@@ -44,9 +44,9 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
 	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  openToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  createSpriteBankToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  memoryToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  imagesToolStripMenuItem;
+
+
+
 	private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  debugDataToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem1;
@@ -79,12 +79,12 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::ToolStripMenuItem^  dumpSpritesToolStripMenuItem;
 	private: System::Windows::Forms::ContextMenuStrip^  ctrlListSpritesContext;
 	private: System::Windows::Forms::ToolStripMenuItem^  CopyOffset;
-	private: System::Windows::Forms::ToolStripMenuItem^  colorKeyToolStripMenuItem;
+
 
 	private: System::Windows::Forms::ContextMenuStrip^  ctrlTooltipContext;
 
 	private: System::Windows::Forms::ToolStripMenuItem^  copyRGBToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  exportPaletteToolStripMenuItem;
+
 	private: System::Windows::Forms::Button^  ctrlBtnCursor;
 	private: System::Windows::Forms::Button^  ctrlBtnPaint;
 	public: System::Windows::Forms::PictureBox^  ctrlPaintColor;
@@ -92,10 +92,18 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::Button^  ctrlBtnColorPick;
 	private: System::Windows::Forms::ToolStripMenuItem^  sheetToolStripMenuItem;
 
-
-
-
+	private: System::Windows::Forms::ToolStripMenuItem^  paletteToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  colorKeyToolStripMenuItem1;
 	private: System::Windows::Forms::ToolStripTextBox^  toolStripTextBox1;
+	private: System::Windows::Forms::ToolStripMenuItem^  exportToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  createToolStripMenuItem;
+
+
+
+
+
+
 	public:
 
 
@@ -128,15 +136,15 @@ namespace PopSpriteEditor {
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->createSpriteBankToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->memoryToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->imagesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->createToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->dumpSpritesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->exportPaletteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->sheetToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->colorKeyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->paletteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->exportToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->colorKeyToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->toolStripTextBox1 = (gcnew System::Windows::Forms::ToolStripTextBox());
+			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->debugDataToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ctrlGroupBoxSelect = (gcnew System::Windows::Forms::GroupBox());
@@ -219,9 +227,9 @@ namespace PopSpriteEditor {
 			// 
 			// menuStrip1
 			// 
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {
 				this->fileToolStripMenuItem,
-					this->sheetToolStripMenuItem, this->aboutToolStripMenuItem, this->aboutToolStripMenuItem1
+					this->sheetToolStripMenuItem, this->paletteToolStripMenuItem, this->aboutToolStripMenuItem, this->aboutToolStripMenuItem1
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -233,7 +241,7 @@ namespace PopSpriteEditor {
 			// 
 			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
 				this->openToolStripMenuItem,
-					this->createSpriteBankToolStripMenuItem, this->dumpSpritesToolStripMenuItem, this->exportPaletteToolStripMenuItem
+					this->saveToolStripMenuItem, this->createToolStripMenuItem, this->dumpSpritesToolStripMenuItem
 			});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
@@ -242,47 +250,30 @@ namespace PopSpriteEditor {
 			// openToolStripMenuItem
 			// 
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(170, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::openToolStripMenuItem_Click);
 			// 
-			// createSpriteBankToolStripMenuItem
+			// saveToolStripMenuItem
 			// 
-			this->createSpriteBankToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
-				this->memoryToolStripMenuItem,
-					this->imagesToolStripMenuItem
-			});
-			this->createSpriteBankToolStripMenuItem->Name = L"createSpriteBankToolStripMenuItem";
-			this->createSpriteBankToolStripMenuItem->Size = System::Drawing::Size(170, 22);
-			this->createSpriteBankToolStripMenuItem->Text = L"Create Sprite Bank";
+			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->saveToolStripMenuItem->Text = L"Save";
+			this->saveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveToolStripMenuItem_Click);
 			// 
-			// memoryToolStripMenuItem
+			// createToolStripMenuItem
 			// 
-			this->memoryToolStripMenuItem->Name = L"memoryToolStripMenuItem";
-			this->memoryToolStripMenuItem->Size = System::Drawing::Size(150, 22);
-			this->memoryToolStripMenuItem->Text = L"From Memory";
-			this->memoryToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::memoryToolStripMenuItem_Click);
-			// 
-			// imagesToolStripMenuItem
-			// 
-			this->imagesToolStripMenuItem->Name = L"imagesToolStripMenuItem";
-			this->imagesToolStripMenuItem->Size = System::Drawing::Size(150, 22);
-			this->imagesToolStripMenuItem->Text = L"From Images";
-			this->imagesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::imagesToolStripMenuItem_Click);
+			this->createToolStripMenuItem->Name = L"createToolStripMenuItem";
+			this->createToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->createToolStripMenuItem->Text = L"Create";
+			this->createToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::createToolStripMenuItem_Click);
 			// 
 			// dumpSpritesToolStripMenuItem
 			// 
 			this->dumpSpritesToolStripMenuItem->Name = L"dumpSpritesToolStripMenuItem";
-			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(170, 22);
+			this->dumpSpritesToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->dumpSpritesToolStripMenuItem->Text = L"Export Sprites";
 			this->dumpSpritesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::dumpSpritesToolStripMenuItem_Click);
-			// 
-			// exportPaletteToolStripMenuItem
-			// 
-			this->exportPaletteToolStripMenuItem->Name = L"exportPaletteToolStripMenuItem";
-			this->exportPaletteToolStripMenuItem->Size = System::Drawing::Size(170, 22);
-			this->exportPaletteToolStripMenuItem->Text = L"Export Palette";
-			this->exportPaletteToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exportPaletteToolStripMenuItem_Click);
 			// 
 			// sheetToolStripMenuItem
 			// 
@@ -291,37 +282,50 @@ namespace PopSpriteEditor {
 			this->sheetToolStripMenuItem->Text = L"Sheet";
 			this->sheetToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::sheetToolStripMenuItem_Click);
 			// 
-			// aboutToolStripMenuItem
+			// paletteToolStripMenuItem
 			// 
-			this->aboutToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
-				this->colorKeyToolStripMenuItem,
-					this->debugDataToolStripMenuItem
+			this->paletteToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->exportToolStripMenuItem,
+					this->colorKeyToolStripMenuItem1
 			});
-			this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
-			this->aboutToolStripMenuItem->Size = System::Drawing::Size(61, 20);
-			this->aboutToolStripMenuItem->Text = L"Options";
+			this->paletteToolStripMenuItem->Name = L"paletteToolStripMenuItem";
+			this->paletteToolStripMenuItem->Size = System::Drawing::Size(55, 20);
+			this->paletteToolStripMenuItem->Text = L"Palette";
 			// 
-			// colorKeyToolStripMenuItem
+			// exportToolStripMenuItem
 			// 
-			this->colorKeyToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->toolStripTextBox1 });
-			this->colorKeyToolStripMenuItem->Name = L"colorKeyToolStripMenuItem";
-			this->colorKeyToolStripMenuItem->Size = System::Drawing::Size(125, 22);
-			this->colorKeyToolStripMenuItem->Text = L"Color Key";
+			this->exportToolStripMenuItem->Name = L"exportToolStripMenuItem";
+			this->exportToolStripMenuItem->Size = System::Drawing::Size(125, 22);
+			this->exportToolStripMenuItem->Text = L"Export";
+			this->exportToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exportToolStripMenuItem_Click);
+			// 
+			// colorKeyToolStripMenuItem1
+			// 
+			this->colorKeyToolStripMenuItem1->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->toolStripTextBox1 });
+			this->colorKeyToolStripMenuItem1->Name = L"colorKeyToolStripMenuItem1";
+			this->colorKeyToolStripMenuItem1->Size = System::Drawing::Size(125, 22);
+			this->colorKeyToolStripMenuItem1->Text = L"Color Key";
 			// 
 			// toolStripTextBox1
 			// 
 			this->toolStripTextBox1->Name = L"toolStripTextBox1";
-			this->toolStripTextBox1->ShortcutsEnabled = false;
 			this->toolStripTextBox1->Size = System::Drawing::Size(100, 23);
 			this->toolStripTextBox1->Text = L"255";
 			this->toolStripTextBox1->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &MainForm::toolStripTextBox1_KeyPress);
 			this->toolStripTextBox1->TextChanged += gcnew System::EventHandler(this, &MainForm::toolStripTextBox1_TextChanged);
 			// 
+			// aboutToolStripMenuItem
+			// 
+			this->aboutToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->debugDataToolStripMenuItem });
+			this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
+			this->aboutToolStripMenuItem->Size = System::Drawing::Size(61, 20);
+			this->aboutToolStripMenuItem->Text = L"Options";
+			// 
 			// debugDataToolStripMenuItem
 			// 
 			this->debugDataToolStripMenuItem->CheckOnClick = true;
 			this->debugDataToolStripMenuItem->Name = L"debugDataToolStripMenuItem";
-			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(125, 22);
+			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(109, 22);
 			this->debugDataToolStripMenuItem->Text = L"Debug";
 			this->debugDataToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::debugDataToolStripMenuItem_CheckedChanged);
 			// 
@@ -490,7 +494,7 @@ namespace PopSpriteEditor {
 			this->ctrlButtonSaveSprite->Name = L"ctrlButtonSaveSprite";
 			this->ctrlButtonSaveSprite->Size = System::Drawing::Size(120, 23);
 			this->ctrlButtonSaveSprite->TabIndex = 5;
-			this->ctrlButtonSaveSprite->Text = L"Save Sprite";
+			this->ctrlButtonSaveSprite->Text = L"Export Sprite";
 			this->ctrlButtonSaveSprite->UseVisualStyleBackColor = true;
 			this->ctrlButtonSaveSprite->Click += gcnew System::EventHandler(this, &MainForm::ctrlButtonSaveSprite_Click);
 			// 
@@ -644,27 +648,27 @@ private: System::Void MainForm_Load(System::Object^  sender, System::EventArgs^ 
 private: System::Void ctrlSpriteSize_ValueChanged(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlButtonSaveSprite_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void debugDataToolStripMenuItem_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
-private: System::Void memoryToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
-private: System::Void dumpSpritesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
-private: System::Void imagesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlNumericGoto_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 private: System::Void aboutToolStripMenuItem1_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlListSprites_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 private: System::Void CopyOffset_Click(System::Object^  sender, System::EventArgs^  e);
-private: System::Void toolStripTextBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-private: System::Void toolStripTextBox1_TextChanged(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlPaletteImg_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 private: System::Void ctrlSpriteImg2_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 private: System::Void ctrlPaletteImg_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 private: System::Void copyRGBToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlSpriteImg2_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-private: System::Void exportPaletteToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlBtnPaint_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void ctrlBtnCursor_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void MainForm_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 private: System::Void ctrlBtnColorPick_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void PopSpriteEditor::MainForm::OnEditorButtonReset();
 private: System::Void sheetToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void toolStripTextBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+private: System::Void toolStripTextBox1_TextChanged(System::Object^  sender, System::EventArgs^  e);
+private: System::Void exportToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void saveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void createToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void dumpSpritesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed

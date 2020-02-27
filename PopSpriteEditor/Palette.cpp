@@ -42,6 +42,7 @@ void Palette::Save(RGB* Palette)
 	}
 
 	pal.WriteToFile((GetCurrentDir() + "//pal.bmp").c_str());
+	printf("Exported palette to current directory\n");
 }
 
 void Palette::Load(std::string& file)

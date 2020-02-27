@@ -403,44 +403,6 @@ inline System::Void PopSpriteEditor::MainForm::debugDataToolStripMenuItem_Checke
 	}
 }
 
-inline System::Void PopSpriteEditor::MainForm::memoryToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
-{
-	auto dialog = gcnew SaveFileDialog();
-	dialog->Title = "Save Sprite Bank";
-	dialog->Filter = "Data|*.dat|Sprite|*.spr";
-
-	if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK &&
-		dialog->FileName != "")
-	{
-		msclr::interop::marshal_context context;
-		g_Sprite.DumpMemoryToBank(context.marshal_as<std::string>((dialog->FileName)));
-	}
-}
-
-inline System::Void PopSpriteEditor::MainForm::dumpSpritesToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
-{
-	printf("Exporting sprites, please wait..\n");
-	for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
-	{
-		g_Sprite.SaveSprite(i);
-	}
-	printf("Done\n");
-}
-
-inline System::Void PopSpriteEditor::MainForm::imagesToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
-{
-	auto dialog = gcnew SaveFileDialog();
-	dialog->Title = "Save Sprite Bank";
-	dialog->Filter = "Data|*.dat|Sprite|*.spr";
-
-	if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK &&
-		dialog->FileName != "")
-	{
-		msclr::interop::marshal_context context;
-		g_Sprite.ImportToBank(context.marshal_as<std::string>((dialog->FileName)));
-	}
-}
-
 inline System::Void PopSpriteEditor::MainForm::ctrlNumericGoto_KeyDown(System::Object ^ sender, System::Windows::Forms::KeyEventArgs ^ e) 
 {
 	if (e->KeyCode == Keys::Enter)
@@ -506,6 +468,49 @@ inline System::Void PopSpriteEditor::MainForm::toolStripTextBox1_TextChanged(Sys
 	}
 
 	Palette::ColorKeys[2] = index;
+}
+
+inline System::Void PopSpriteEditor::MainForm::exportToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	Palette::Save(g_Palette);
+}
+
+inline System::Void PopSpriteEditor::MainForm::saveToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	auto dialog = gcnew SaveFileDialog();
+	dialog->Title = "Save Sprite Bank";
+	dialog->Filter = "Data|*.dat|Sprite|*.spr";
+
+	if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK &&
+		dialog->FileName != "")
+	{
+		msclr::interop::marshal_context context;
+		g_Sprite.DumpMemoryToBank(context.marshal_as<std::string>((dialog->FileName)));
+	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::createToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	auto dialog = gcnew SaveFileDialog();
+	dialog->Title = "Save Sprite Bank";
+	dialog->Filter = "Data|*.dat|Sprite|*.spr";
+
+	if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK &&
+		dialog->FileName != "")
+	{
+		msclr::interop::marshal_context context;
+		g_Sprite.ImportToBank(context.marshal_as<std::string>((dialog->FileName)));
+	}
+}
+
+inline System::Void PopSpriteEditor::MainForm::dumpSpritesToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	printf("Exporting sprites, please wait..\n");
+	for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
+	{
+		g_Sprite.SaveSprite(i);
+	}
+	printf("Done\n");
 }
 
 inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseMove(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 
@@ -652,11 +657,6 @@ inline System::Void PopSpriteEditor::MainForm::ctrlSpriteImg2_MouseDown(System::
 	}
 }
 
-inline System::Void PopSpriteEditor::MainForm::exportPaletteToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
-{
-	Palette::Save(g_Palette);
-}
-
 inline System::Void PopSpriteEditor::MainForm::MainForm_KeyDown(System::Object ^ sender, System::Windows::Forms::KeyEventArgs ^ e) 
 {
 	if ((e->Control) && e->KeyCode == Keys::Z)
@@ -733,7 +733,6 @@ inline System::Void PopSpriteEditor::MainForm::ctrlBtnPaint_Click(System::Object
 
 inline System::Void PopSpriteEditor::MainForm::ctrlBtnCursor_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
-	//g_Sprite.SheetCreate("C:\\Users\\T\\source\\repos\\PopSpriteEditor\\Release\\test\\test2.bmp");
 	OnEditorButtonReset();
 	g_Editor.Mode = EDITOR_MODE_NORMAL;
 	Cursor->Current = Cursors::Arrow;
@@ -759,4 +758,3 @@ inline System::Void PopSpriteEditor::MainForm::sheetToolStripMenuItem_Click(Syst
 		PopSpriteEditor::GlobalForms::SheetWindow->Show();
 	}
 }
-

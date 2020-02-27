@@ -57,17 +57,6 @@ bool CSprite::LoadBank(const std::string& file)
 
 		for (uint32_t i = 0; i < SprBank.Header.Frames; i++)
 		{
-			/*
-			sprData.Sprite->Width = *(reinterpret_cast<uint16_t*>(buffer));
-			buffer += sizeof(uint16_t);
-			sprData.Sprite->Height = *(reinterpret_cast<uint16_t*>(buffer));
-			buffer += sizeof(uint16_t);
-			sprData.Offset = *(reinterpret_cast<uint32_t*>(buffer));
-			buffer += sizeof(uint32_t);
-			sprData.Sprite->Data = reinterpret_cast<int8_t*>(sprData.Offset);
-			sprFile.Data.push_back(sprData);
-			*/
-
 			SprBank.Data.push_back({ *(reinterpret_cast<CSprite::TbSprite*>(buffer)) });
 			SprBank.Data.back().Data = reinterpret_cast<int8_t*>(m_pBuffer + SprBank.Data.back().Sprite.Offset);
 			buffer += sizeof(CSprite::TbSprite);
