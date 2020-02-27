@@ -51,7 +51,7 @@ public:
 	Bank SprBank;
 	bool LoadBank(const std::string& file);
 	void MapSprite(uint16_t index);
-	void SaveSprite(uint16_t index);
+	void ExportSprite(uint16_t index);
 	void ExportSprites();
 	void DumpMemoryToBank(std::string& path);
 	void ImportToBank(std::string& path);

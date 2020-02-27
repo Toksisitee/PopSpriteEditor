@@ -381,7 +381,7 @@ inline System::Void PopSpriteEditor::MainForm::ctrlButtonSaveSprite_Click(System
 		return;
 
 	uint16_t selectedIndex = ctrlListSprites->FocusedItem->Index;
-	g_Sprite.SaveSprite(selectedIndex);
+	g_Sprite.ExportSprite(selectedIndex);
 }
 
 inline System::Void PopSpriteEditor::MainForm::debugDataToolStripMenuItem_CheckedChanged(System::Object ^ sender, System::EventArgs ^ e) 

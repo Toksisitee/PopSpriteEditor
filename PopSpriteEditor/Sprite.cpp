@@ -126,7 +126,7 @@ void CSprite::MapSprite(uint16_t index)
 	}
 }
 
-void CSprite::SaveSprite(uint16_t index)
+void CSprite::ExportSprite(uint16_t index)
 {
 	uint8_t pal_idx;
 	BMP bmp;
@@ -157,7 +157,7 @@ void CSprite::ExportSprites()
 	printf("Exporting sprites, please wait..\n");
 	for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
 	{
-		g_Sprite.SaveSprite(i);
+		g_Sprite.ExportSprite(i);
 	}
 	printf("Done\n");
 }
