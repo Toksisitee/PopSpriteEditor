@@ -179,7 +179,7 @@ namespace PopSpriteEditor {
 			this->MaximumSize = System::Drawing::Size(420, 500);
 			this->MinimumSize = System::Drawing::Size(420, 500);
 			this->Name = L"AboutForm";
-			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"About";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &AboutForm::AboutForm_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &AboutForm::AboutForm_Load);

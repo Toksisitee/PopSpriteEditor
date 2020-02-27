@@ -217,6 +217,7 @@ namespace PopSpriteEditor {
 			this->Controls->Add(this->ctrlCreateSheet);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"SheetForm";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Sprite Sheet Manager";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &SheetForm::SheetForm_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &SheetForm::SheetForm_Load);
