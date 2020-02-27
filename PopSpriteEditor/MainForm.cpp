@@ -24,6 +24,7 @@
 #include "Sprite.h"
 #include "Palette.h"
 #include "AboutForm.h"
+#include "SheetForm.h"
 #include "Editor.h"
 
 using namespace System;
@@ -52,19 +53,15 @@ struct Editor
 	uint8_t Mode = EDITOR_MODE_NORMAL;
 	uint8_t ColorIndex = 255;
 	uint8_t ColorIndex2 = 255;
-	
 };
 
-CSprite g_Sprite;
 gcroot<System::String^> g_InitialDirectory = nullptr;
 gcroot<ToolTip^> g_PixelTip = nullptr;
 gcroot<System::Drawing::Bitmap^> g_BitmapPalette = nullptr;
 gcroot<System::Drawing::Bitmap^> g_BitmapSprite = nullptr;
-
 Editor g_Editor;
 std::vector<EditBuffer> g_EditUndo;
 std::vector<EditBuffer>	g_EditRedo;
-
 ScreenPixel g_ScrPixel;
 
 [STAThreadAttribute]
@@ -83,6 +80,7 @@ int main(array<System::String^> ^args)
 	Application::SetCompatibleTextRenderingDefault(false);
 
 	Directory::CreateDirectory(Path::Combine(Directory::GetCurrentDirectory(), "output"));
+	Directory::CreateDirectory(Path::Combine(Directory::GetCurrentDirectory(), "sheet-output"));
 
 	PopSpriteEditor::GlobalForms::MainWindow = gcnew PopSpriteEditor::MainForm();
 	Application::Run(PopSpriteEditor::GlobalForms::MainWindow);
@@ -735,6 +733,7 @@ inline System::Void PopSpriteEditor::MainForm::ctrlBtnPaint_Click(System::Object
 
 inline System::Void PopSpriteEditor::MainForm::ctrlBtnCursor_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	//g_Sprite.SheetCreate("C:\\Users\\T\\source\\repos\\PopSpriteEditor\\Release\\test\\test2.bmp");
 	OnEditorButtonReset();
 	g_Editor.Mode = EDITOR_MODE_NORMAL;
 	Cursor->Current = Cursors::Arrow;
@@ -750,5 +749,14 @@ inline System::Void PopSpriteEditor::MainForm::ctrlBtnColorPick_Click(System::Ob
 	ctrlPaletteImg->Cursor = Cursors::Cross;
 	ctrlSpriteImg2->Cursor = Cursors::Cross;
 	ctrlBtnColorPick->FlatAppearance->BorderColor = Color::Red;
+}
+
+inline System::Void PopSpriteEditor::MainForm::sheetToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	if (PopSpriteEditor::GlobalForms::SheetWindow == nullptr)
+	{
+		PopSpriteEditor::GlobalForms::SheetWindow = gcnew PopSpriteEditor::SheetForm();
+		PopSpriteEditor::GlobalForms::SheetWindow->Show();
+	}
 }
 

@@ -1,4 +1,6 @@
 #pragma once
+#include <cstdint>
+
 #define TO_STRING(s)	#s
 #define STRINGIFY(s)	TO_STRING(s)
 
@@ -15,3 +17,9 @@
 #define EDITOR_MODE_COLOR_PICK	(2)
 
 #define EDITOR_MAX_BUFFER	(200)
+
+struct Vector2
+{
+	int32_t x = 0;
+	int32_t y = 0;
+};

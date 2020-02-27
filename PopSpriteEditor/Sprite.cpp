@@ -15,15 +15,16 @@
 	along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <vector>
 #include <cstdint>
 #include <fstream>
 #include "Utility.h"
-#include "EasyBMP/EasyBMP.h"
 #include "Palette.h"
 #include <filesystem>
 #include <algorithm>
 #include "Sprite.h"
+#include "Editor.h"
+
+CSprite g_Sprite;
 
 bool CSprite::LoadBank(const std::string& file)
 {
@@ -150,7 +151,6 @@ void CSprite::SaveSprite(uint16_t index)
 	{
 		for (uint16_t y = 0; y < SprBank.Data[index].Sprite.Height; y++)
 		{
-			//printf("(%i,%i)x: %i, y: %i\n", SprBank.Data[palIndex].Sprite.Width, SprBank.Data[palIndex].Sprite.Height, x, y);
 			pal_idx = SprBank.Data[index].Map[x][y];
 
 			if (Palette::IndexIsColorKey(pal_idx))
@@ -409,4 +409,298 @@ void CSprite::ImportToBank(std::string& path)
 	{
 		printf("Failed to open output stream. Sprite bank file was NOT created\n");
 	}
+}
+
+bool CSprite::IsPixelEmpty(const RGBApixel& rgb)
+{
+	if (rgb.Red == 0 &&
+		rgb.Green == 255 &&
+		rgb.Blue == 255)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool CSprite::IsPixelColorKey(const RGBApixel& rgb)
+{
+	if (rgb.Red == 255 &&
+		rgb.Green == 0 &&
+		rgb.Blue == 255)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+int32_t CSprite::findSection(const int32_t& offset, BMP& sheet)
+{
+	RGBApixel rgb;
+	auto height = sheet.TellHeight();
+
+	for (int32_t y = offset + 1; y < height; y++)
+	{
+		rgb = sheet.GetPixel(0, y); 
+		if (IsPixelColorKey(rgb))
+		{
+			return y;
+		}
+	}
+
+	return height;
+}
+
+bool CSprite::SheetExtract(const std::string& filePath, const std::string& outputPath, bool rekey, uint32_t startIndex)
+{
+	BMP sheet;
+	RGBApixel rgb;
+	int32_t sy = 0
+		, psy = 0
+		, shw, shy
+		, sprw, sprh
+		, count = startIndex;
+	Vector2 vL, vR;
+	bool column_empty;
+
+	auto reset = [&]() {
+		memset(&vL, 0, sizeof(Vector2));
+		memset(&vR, 0, sizeof(Vector2));
+		sprw = 0;
+		sprh = 0;
+	};
+
+	if (sheet.ReadFromFile(filePath.c_str()))
+	{
+		shw = sheet.TellWidth();
+		shy = sheet.TellHeight();
+		sy = findSection(sy, sheet);
+
+		for (int32_t x = 0; x < shw; x++)
+		{
+			column_empty = true;
+
+			for (int32_t y = sy-1; y != 0; y--)
+			{
+				rgb = sheet.GetPixel(x, y);
+				if (!IsPixelEmpty(rgb))
+				{
+					column_empty = false;
+
+					if (vL.x == 0)
+						vL.x = x;
+
+					if (y > vL.y || !vL.y)
+						vL.y = y;
+
+					if (y < vR.y || !vR.y)
+						vR.y = y;
+				}
+				else
+				{
+					if ((y - 2) > 0)
+					{
+						if ((IsPixelColorKey(sheet.GetPixel(x, y - 1)) &&
+							IsPixelEmpty(sheet.GetPixel(x, y - 2))) ||
+							(IsPixelColorKey(sheet.GetPixel(x, y - 1)) &&
+							psy == y - 1))
+						{
+							break;
+						}
+					}
+				}
+			}
+
+			if ((column_empty && *((int32_t*)&vL)) || 
+				(x + 1) > shw)
+			{
+				vR.x = x;
+
+				sprw = vR.x - vL.x;
+				sprh = vL.y - vR.y;
+				sprh += 1;
+
+				BMP spr;
+				spr.SetBitDepth(24);
+				spr.SetSize(sprw, sprh);
+			
+				for (uint32_t i = 0; i < sprw; i++)
+				{
+					for (uint32_t j = 0; j < sprh; j++)
+					{ 
+						rgb = sheet.GetPixel(vL.x + i, vR.y + j);
+
+						if (rekey && IsPixelEmpty(rgb))
+						{
+							rgb.Red = 255;
+							rgb.Green = 0;
+							rgb.Blue = 255;
+						}
+							
+						spr.SetPixel(i, j, rgb);
+					}
+				}
+
+				spr.WriteToFile((outputPath + "//" + std::to_string(count) + ".bmp").c_str());
+				count++;
+				reset();
+			}
+
+			if ((x + 2) > shw)
+			{
+				if (sy == shy)
+					break;
+
+				x = 0;
+				psy = sy;
+				sy = findSection(sy+1, sheet);
+			}
+		}
+
+		printf("Finished parsing sprite sheet. Found %i sprites\n", count);
+		return true;
+	}
+
+	printf("Problem loading sprite sheet:\n    %s\n", filePath.c_str());
+	return false;
+}
+
+void CSprite::SheetCreate(const std::string& filePath, const std::string& sourcePath)
+{
+	BMP sheet;
+	uint16_t sprs
+		, sprw, sprh
+		, hh = 0
+		, cx = 1, cy = 1
+		, shw = 0, shy = 0;
+	std::vector<std::pair<uint32_t, std::shared_ptr<BMP>>> vecSprs;
+
+	for (const auto & entry : std::filesystem::directory_iterator(sourcePath))
+	{
+		if (!(entry.is_directory()) && (entry.path().extension() == ".bmp"))
+		{
+			std::string filename = entry.path().filename().string();
+			std::string tmp = filename.substr(0, filename.find(".", 0));
+
+			if (std::all_of(tmp.begin(), tmp.end(), isdigit))
+			{
+				uint32_t idx = std::stoi(tmp);
+				auto bmp = std::make_shared<BMP>();
+				if (!bmp->ReadFromFile((entry.path().string()).c_str()))
+				{
+					printf("Failed to open:\n    %s, skipping\n", tmp.c_str());
+					continue;
+				}
+
+				vecSprs.push_back(std::make_pair(idx, bmp));
+			}
+		}
+	}
+
+	std::sort(vecSprs.begin(), vecSprs.end(), [](
+		const std::pair<uint32_t, std::shared_ptr<BMP>>& fspr,
+		const std::pair<uint32_t, std::shared_ptr<BMP>>& sspr)
+	{
+		return (fspr.first < sspr.first);
+	});
+
+	auto it = std::unique(vecSprs.begin(), vecSprs.end(), [](
+		const std::pair<uint32_t, std::shared_ptr<BMP>>& fspr,
+		const std::pair<uint32_t, std::shared_ptr<BMP>>& sspr)
+	{
+		return fspr.first == sspr.first;
+	});
+
+	vecSprs.erase(it, vecSprs.end());
+
+	sprs = vecSprs.size();
+
+#define PAD_X	(4)
+#define	PAD_Y	(6)
+
+	for (uint32_t i = 0; i < sprs; i++)
+	{
+		auto spr = vecSprs[i].second;
+		sprw = spr->TellWidth();
+		sprh = spr->TellHeight();
+
+		if ((cx + sprw + PAD_X) <= 800)
+		{
+			cx += sprw + PAD_X;
+
+			if (shw < cx)
+				shw = cx;
+
+			if (hh < sprh)
+				hh = sprh;
+		}
+		else
+		{
+			cx = 0;
+			cy += hh + PAD_Y;
+			hh = 0;
+		}
+
+		if ((sprh + cy + PAD_Y) > shy)
+			shy = sprh + cy + PAD_Y;
+	}
+
+	printf("Creating sprite sheet (%i sprites) with a size of %ix%i\n", sprs, shw, shy);
+	sheet.SetBitDepth(24);
+	sheet.SetSize(shw, shy);
+
+	RGBApixel rgb;
+	rgb.Red = 0;
+	rgb.Green = 255;
+	rgb.Blue = 255;
+	rgb.Alpha = 255;
+	for (uint32_t x = 0; x < shw; x++)
+	{
+		for (uint32_t y = 0; y < shy; y++)
+		{
+			sheet.SetPixel(x, y, rgb);
+		}
+	}
+
+	cx = 1, cy = 1; 
+	hh = 0;
+	for (uint32_t i = 0; i < sprs; i++)
+	{
+		auto spr = vecSprs[i].second;
+		sprw = spr->TellWidth();
+		sprh = spr->TellHeight();
+
+		if ((cx + sprw + 1) < shw)
+		{
+			for (uint32_t x = 0; x < sprw; x++)
+			{
+				for (uint32_t y = 0; y < sprh; y++)
+				{
+					sheet.SetPixel(cx + x, cy + y, spr->GetPixel(x, y));
+				}
+			}
+
+			cx += sprw + PAD_X;
+
+			if (hh < sprh)
+				hh = sprh;
+		}
+		else
+		{
+			cx = 1;
+			cy += hh + PAD_Y;
+			hh = 0;
+
+			for (uint32_t x = 0; x < shw; x++)
+			{
+				sheet.SetPixel(x, cy - (PAD_Y/2), {255, 0, 255, 255});
+			}
+
+			sprs--;
+		}
+	}
+
+	sheet.WriteToFile(filePath.c_str());
+	printf("Created sprite sheet:\n    %s\n", filePath.c_str());
 }

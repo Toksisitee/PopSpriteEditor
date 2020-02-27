@@ -80,7 +80,7 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::ContextMenuStrip^  ctrlListSpritesContext;
 	private: System::Windows::Forms::ToolStripMenuItem^  CopyOffset;
 	private: System::Windows::Forms::ToolStripMenuItem^  colorKeyToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripTextBox^  toolStripTextBox1;
+
 	private: System::Windows::Forms::ContextMenuStrip^  ctrlTooltipContext;
 
 	private: System::Windows::Forms::ToolStripMenuItem^  copyRGBToolStripMenuItem;
@@ -90,6 +90,12 @@ namespace PopSpriteEditor {
 	public: System::Windows::Forms::PictureBox^  ctrlPaintColor;
 	public: System::Windows::Forms::PictureBox^  ctrlPaintColor2;
 	private: System::Windows::Forms::Button^  ctrlBtnColorPick;
+	private: System::Windows::Forms::ToolStripMenuItem^  sheetToolStripMenuItem;
+
+
+
+
+	private: System::Windows::Forms::ToolStripTextBox^  toolStripTextBox1;
 	public:
 
 
@@ -127,6 +133,7 @@ namespace PopSpriteEditor {
 			this->imagesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->dumpSpritesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exportPaletteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->sheetToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->colorKeyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->toolStripTextBox1 = (gcnew System::Windows::Forms::ToolStripTextBox());
@@ -212,9 +219,9 @@ namespace PopSpriteEditor {
 			// 
 			// menuStrip1
 			// 
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
 				this->fileToolStripMenuItem,
-					this->aboutToolStripMenuItem, this->aboutToolStripMenuItem1
+					this->sheetToolStripMenuItem, this->aboutToolStripMenuItem, this->aboutToolStripMenuItem1
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -276,6 +283,13 @@ namespace PopSpriteEditor {
 			this->exportPaletteToolStripMenuItem->Size = System::Drawing::Size(170, 22);
 			this->exportPaletteToolStripMenuItem->Text = L"Export Palette";
 			this->exportPaletteToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exportPaletteToolStripMenuItem_Click);
+			// 
+			// sheetToolStripMenuItem
+			// 
+			this->sheetToolStripMenuItem->Name = L"sheetToolStripMenuItem";
+			this->sheetToolStripMenuItem->Size = System::Drawing::Size(48, 20);
+			this->sheetToolStripMenuItem->Text = L"Sheet";
+			this->sheetToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::sheetToolStripMenuItem_Click);
 			// 
 			// aboutToolStripMenuItem
 			// 
@@ -650,6 +664,7 @@ private: System::Void ctrlBtnCursor_Click(System::Object^  sender, System::Event
 private: System::Void MainForm_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 private: System::Void ctrlBtnColorPick_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void PopSpriteEditor::MainForm::OnEditorButtonReset();
+private: System::Void sheetToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed
@@ -657,5 +672,6 @@ private: System::Void PopSpriteEditor::MainForm::OnEditorButtonReset();
 	public:
 		static MainForm^ MainWindow;
 		static Form^ AboutWindow;
+		static Form^ SheetWindow;
 	};
 }

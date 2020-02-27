@@ -141,6 +141,7 @@
     <ClCompile Include="EasyBMP\EasyBMP.cpp" />
     <ClCompile Include="MainForm.cpp" />
     <ClCompile Include="Palette.cpp" />
+    <ClCompile Include="SheetForm.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
@@ -158,6 +159,9 @@
     </ClInclude>
     <ClInclude Include="Palette.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SheetForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
@@ -167,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SheetForm.resx">
+      <DependentUpon>SheetForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

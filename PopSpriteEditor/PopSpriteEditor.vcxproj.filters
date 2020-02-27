@@ -36,6 +36,9 @@
     <ClCompile Include="EasyBMP\EasyBMP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SheetForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainForm.h">
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="EasyBMP\EasyBMP_VariousBMPutilities.h">
       <Filter>Header Files\EasyBMP</Filter>
+    </ClInclude>
+    <ClInclude Include="SheetForm.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
