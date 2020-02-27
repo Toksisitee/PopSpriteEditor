@@ -444,10 +444,12 @@ int32_t CSprite::findSection(const int32_t& offset, BMP& sheet)
 		rgb = sheet.GetPixel(0, y); 
 		if (IsPixelColorKey(rgb))
 		{
+		//	printf("found section at %i\n", y);
 			return y;
 		}
 	}
 
+	//printf("didn't find section\n");
 	return height;
 }
 
@@ -482,6 +484,9 @@ bool CSprite::SheetExtract(const std::string& filePath, const std::string& outpu
 
 			for (int32_t y = sy-1; y != 0; y--)
 			{
+				if (y == psy)
+					break;
+
 				rgb = sheet.GetPixel(x, y);
 				if (!IsPixelEmpty(rgb))
 				{
