@@ -152,6 +152,16 @@ void CSprite::SaveSprite(uint16_t index)
 	bmp.WriteToFile((GetCurrentDir() + "//output//" + std::to_string(index) + ".bmp").c_str());
 }
 
+void CSprite::ExportSprites()
+{
+	printf("Exporting sprites, please wait..\n");
+	for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
+	{
+		g_Sprite.SaveSprite(i);
+	}
+	printf("Done\n");
+}
+
 System::Drawing::Bitmap^ CSprite::getSpriteBitmapHandle(uint16_t index)
 {
 	uint8_t pal_idx;

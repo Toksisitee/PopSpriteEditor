@@ -505,12 +505,7 @@ inline System::Void PopSpriteEditor::MainForm::createToolStripMenuItem_Click(Sys
 
 inline System::Void PopSpriteEditor::MainForm::dumpSpritesToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
 {
-	printf("Exporting sprites, please wait..\n");
-	for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
-	{
-		g_Sprite.SaveSprite(i);
-	}
-	printf("Done\n");
+	g_Sprite.ExportSprites();
 }
 
 inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseMove(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 

@@ -52,6 +52,7 @@ public:
 	bool LoadBank(const std::string& file);
 	void MapSprite(uint16_t index);
 	void SaveSprite(uint16_t index);
+	void ExportSprites();
 	void DumpMemoryToBank(std::string& path);
 	void ImportToBank(std::string& path);
 	void ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t index, uint32_t maxIndex);
