@@ -59,14 +59,17 @@ public:
 	System::Drawing::Bitmap^ getSpriteBitmapHandle(uint16_t index);
 	bool SheetExtract(const std::string& filePath, const std::string& outputPath, bool rekey, uint32_t startIndex);
 	void SheetCreate(const std::string& filePath, const std::string& sourcePath);
-	void Clear() { delete[] m_pBuffer; SprBank.Data.clear(); }
+	void Clear() { delete[] m_pBuffer; SprBank.Data.clear(); m_IsHFX = false; }
+	void SetHFX(bool b) { m_IsHFX = b; };
 
 private:
+	bool m_IsHFX = false;
 	char* m_pBuffer;
 	uint32_t m_nBufferLength;
 	int32_t findSection(const int32_t& offset, BMP& sheet);
 	bool IsPixelColorKey(const RGBApixel& rgb);
 	bool IsPixelEmpty(const RGBApixel& rgb);
+	bool IsAlphaSprite(uint32_t index);
 };
 
 extern CSprite g_Sprite;

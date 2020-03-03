@@ -184,6 +184,10 @@ System::Drawing::Bitmap^ CSprite::getSpriteBitmapHandle(uint16_t index)
 			if (Palette::IndexIsColorKey(pal_idx))
 				pal_idx = Palette::ColorKeys[0];
 
+			if (IsAlphaSprite(index))
+				if (pal_idx != 255)
+					pal_idx = g_AlphaTable[pal_idx * 256];
+
 			auto clr = System::Drawing::Color::FromArgb(
 				255,
 				g_Palette[pal_idx].R,
@@ -211,7 +215,8 @@ void CSprite::DumpMemoryToBank(std::string& path)
 void CSprite::ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t index, uint32_t maxIndex)
 {
 	uint8_t bs = 0
-		, br = 0;
+		, br = 0,
+		pal_idx;
 	uint16_t sprw
 		, sprh
 		, px = 0
@@ -243,8 +248,13 @@ void CSprite::ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t
 		for (uint32_t x = 0; x < sprw; x++)
 		{
 			rgb = sprbmp.GetPixel(x, y);
-			auto idx = Palette::FindColor({ rgb.Red, rgb.Green, rgb.Blue }, true);
-			pal.push_back(idx);
+
+			if (IsAlphaSprite(index))
+				pal_idx = Palette::FindColorAll({ rgb.Red, rgb.Green, rgb.Blue }, true);
+			else
+				pal_idx = Palette::FindColor({ rgb.Red, rgb.Green, rgb.Blue }, true);
+
+			pal.push_back(pal_idx);
 		}
 	}
 
@@ -311,6 +321,7 @@ void CSprite::ImportToBank(std::string& path)
 	std::vector<uint8_t> conv, pal;
 	std::vector<std::vector<uint8_t>> data;
 	char szMagic[4] = { 0x50, 0x53, 0x46, 0x42 };
+	bool isHFX = m_IsHFX;
 
 	for (const auto & entry : std::filesystem::directory_iterator((GetCurrentDir() + "output")))
 	{
@@ -368,6 +379,13 @@ void CSprite::ImportToBank(std::string& path)
 	sprs = spri.size();
 	printf("Imported %i sprites\n", sprs);
 
+	if ((sprs >= 1614 && sprs <= 3000) && m_IsHFX == false)
+	{
+		auto result = System::Windows::Forms::MessageBox::Show("Is this an HFX bank?", "Bank Type", System::Windows::Forms::MessageBoxButtons::YesNo, System::Windows::Forms::MessageBoxIcon::Information);
+		if (result == System::Windows::Forms::DialogResult::Yes)
+			g_Sprite.SetHFX(true);
+	}
+
 	spro = sizeof(CSprite::BankHeader) + (sizeof(CSprite::TbSprite) * sprf);
 	printf("Offset starting at %#04X\n", spro);
 
@@ -401,12 +419,14 @@ void CSprite::ImportToBank(std::string& path)
 			}
 		}
 
+		SetHFX(isHFX);
 		printf("Created sprite bank file\n");
 		ofs.close();
 	}
 	else
 	{
 		printf("Failed to open output stream. Sprite bank file was NOT created\n");
+		SetHFX(isHFX);
 	}
 }
 
@@ -694,4 +714,18 @@ void CSprite::SheetCreate(const std::string& filePath, const std::string& source
 
 	sheet.WriteToFile(filePath.c_str());
 	printf("Created sprite sheet:\n    %s\n", filePath.c_str());
+}
+
+bool CSprite::IsAlphaSprite(uint32_t index)
+{
+	if (m_IsHFX)
+	{
+		if (index >= 1090 && index <= 1499 ||
+			index >= 1538 && index <= 1592)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

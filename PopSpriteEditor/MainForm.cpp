@@ -146,6 +146,14 @@ inline System::Void PopSpriteEditor::MainForm::openToolStripMenuItem_Click(Syste
 		msclr::interop::marshal_context context;
 		if (g_Sprite.LoadBank(context.marshal_as<std::string>(dialog->FileName)))
 		{
+			if (g_Sprite.SprBank.Header.Frames >= 1614 &&
+				g_Sprite.SprBank.Header.Frames <= 3000)
+			{
+				auto result = MessageBox::Show("Is this an HFX bank?", "Bank Type", MessageBoxButtons::YesNo, MessageBoxIcon::Information);
+				if (result == System::Windows::Forms::DialogResult::Yes)
+					g_Sprite.SetHFX(true);
+			}
+
 			ctrlListSprites->Items->Clear();
 			for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
 			{
