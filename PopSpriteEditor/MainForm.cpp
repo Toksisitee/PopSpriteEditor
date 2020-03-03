@@ -467,6 +467,9 @@ inline System::Void PopSpriteEditor::MainForm::exportToolStripMenuItem_Click(Sys
 
 inline System::Void PopSpriteEditor::MainForm::saveToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 
 {
+	MessageBox::Show("Saving is disabled - use the \"Create\" feature instead.", "PopSpriteEditor", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+	return;
+
 	auto dialog = gcnew SaveFileDialog();
 	dialog->Title = "Save Sprite Bank";
 	dialog->Filter = "Data|*.dat|Sprite|*.spr";
