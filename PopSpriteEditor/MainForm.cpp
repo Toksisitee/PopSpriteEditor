@@ -50,9 +50,11 @@ int main(array<System::String^> ^args)
 	printf("PopSpriteEditor\n");
 
 	std::string palettePath = GetCurrentDir() + "pal.dat";
-	Palette::Load(palettePath);
+	if (!Palette::Load(palettePath))
+		System::Threading::Thread::Sleep(System::Threading::Timeout::Infinite);
 	std::string alphaPath = GetCurrentDir() + "al.dat";
-	Palette::LoadAlpha(alphaPath);
+	if (!Palette::LoadAlpha(alphaPath))
+		System::Threading::Thread::Sleep(System::Threading::Timeout::Infinite);
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
@@ -146,6 +148,8 @@ inline System::Void PopSpriteEditor::MainForm::openToolStripMenuItem_Click(Syste
 		msclr::interop::marshal_context context;
 		if (g_Sprite.LoadBank(context.marshal_as<std::string>(dialog->FileName)))
 		{
+			ctrlButtonSaveSprite->Enabled = true;
+
 			if (g_Sprite.SprBank.Header.Frames >= 1614 &&
 				g_Sprite.SprBank.Header.Frames <= 3000)
 			{

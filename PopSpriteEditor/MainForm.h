@@ -490,6 +490,7 @@ namespace PopSpriteEditor {
 			// 
 			// ctrlButtonSaveSprite
 			// 
+			this->ctrlButtonSaveSprite->Enabled = false;
 			this->ctrlButtonSaveSprite->Location = System::Drawing::Point(91, 40);
 			this->ctrlButtonSaveSprite->Name = L"ctrlButtonSaveSprite";
 			this->ctrlButtonSaveSprite->Size = System::Drawing::Size(120, 23);

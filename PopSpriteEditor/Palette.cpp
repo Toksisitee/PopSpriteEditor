@@ -45,7 +45,7 @@ void Palette::Save(RGB* palette)
 	printf("Exported palette to current directory\n");
 }
 
-void Palette::Load(std::string& file)
+bool Palette::Load(std::string& file)
 {
 	char pad;
 	std::ifstream ifs(file, std::ios::binary);
@@ -61,12 +61,16 @@ void Palette::Load(std::string& file)
 			ifs.read(reinterpret_cast<char*>(&g_Palette[i].B), sizeof(uint8_t));
 			ifs.read(&pad, sizeof(uint8_t));
 		}
+
+		ifs.close();
+		return true;
 	}
 
-	ifs.close();
+	printf("Failed to load the color palette, ensure the following file exists:\n    %s\n", file.c_str());
+	return false;
 }
 
-void Palette::LoadAlpha(std::string& file)
+bool Palette::LoadAlpha(std::string& file)
 {
 	std::ifstream ifs(file, std::ios::binary);
 
@@ -76,9 +80,13 @@ void Palette::LoadAlpha(std::string& file)
 
 		for (uint32_t i = 0; i < 256 * 256; i++)
 			ifs.read(reinterpret_cast<char*>(&g_AlphaTable[i]), sizeof(uint8_t));
+
+		ifs.close();
+		return true;
 	}
 
-	ifs.close();
+	printf("Failed to load the alpha table, ensure the following file exists:\n    %s\n", file.c_str());
+	return false;
 }
 
 uint8_t Palette::FindClosestColor(RGB rgb)
@@ -144,6 +152,8 @@ uint8_t Palette::FindColorAll(RGB rgb, bool closest)
 	// Just a fallback
 	if (closest)
 		return Palette::FindClosestColor(rgb);
+
+	printf("Couldn't find RGB: %i, %i, %i. Using color key instead.\n", rgb.R, rgb.G, rgb.B);
 
 	return Palette::ColorKeys[0];
 }

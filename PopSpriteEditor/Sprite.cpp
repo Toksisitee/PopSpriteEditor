@@ -53,6 +53,13 @@ bool CSprite::LoadBank(const std::string& file)
 			return false;
 		}
 
+		if (SprBank.Header.Frames == 0)
+		{
+			printf("Couldn't find any sprite frames..\n");
+			this->Clear();
+			return false;
+		}
+
 		printf("Found %i sprite frames.\n", SprBank.Header.Frames);
 
 		for (uint32_t i = 0; i < SprBank.Header.Frames; i++)
@@ -158,12 +165,17 @@ void CSprite::ExportSprite(uint16_t index)
 
 void CSprite::ExportSprites()
 {
-	printf("Exporting sprites, please wait..\n");
-	for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
+	if (SprBank.Header.Frames > 0)
 	{
-		g_Sprite.ExportSprite(i);
+		printf("Exporting sprites, please wait..\n");
+		for (uint32_t i = 0; i < g_Sprite.SprBank.Header.Frames; i++)
+		{
+			g_Sprite.ExportSprite(i);
+		}
+		printf("Done\n");
 	}
-	printf("Done\n");
+	else
+		printf("Load a valid sprite bank to export sprites.\n");
 }
 
 System::Drawing::Bitmap^ CSprite::getSpriteBitmapHandle(uint16_t index)
