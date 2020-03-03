@@ -51,6 +51,8 @@ int main(array<System::String^> ^args)
 
 	std::string palettePath = GetCurrentDir() + "pal.dat";
 	Palette::Load(palettePath);
+	std::string alphaPath = GetCurrentDir() + "al.dat";
+	Palette::LoadAlpha(alphaPath);
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
@@ -443,7 +445,7 @@ inline System::Void PopSpriteEditor::MainForm::toolStripTextBox1_TextChanged(Sys
 		box->Text = "255";
 	}
 
-	Palette::ColorKeys[2] = index;
+	Palette::ColorKeys[1] = index;
 }
 
 inline System::Void PopSpriteEditor::MainForm::exportToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) 

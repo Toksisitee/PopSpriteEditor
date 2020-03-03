@@ -22,8 +22,8 @@
 #include "Palette.h"
 
 RGB g_Palette[256];
-
-uint8_t Palette::ColorKeys[3] = { 255, 0, 255 };
+uint8_t g_AlphaTable[256 * 256];
+uint8_t Palette::ColorKeys[2] = { 255, 255 };
 
 void Palette::Save(RGB* palette)
 {
@@ -61,6 +61,21 @@ void Palette::Load(std::string& file)
 			ifs.read(reinterpret_cast<char*>(&g_Palette[i].B), sizeof(uint8_t));
 			ifs.read(&pad, sizeof(uint8_t));
 		}
+	}
+
+	ifs.close();
+}
+
+void Palette::LoadAlpha(std::string& file)
+{
+	std::ifstream ifs(file, std::ios::binary);
+
+	if (ifs.is_open())
+	{
+		ifs.seekg(0);
+
+		for (uint32_t i = 0; i < 256 * 256; i++)
+			ifs.read(reinterpret_cast<char*>(&g_AlphaTable[i]), sizeof(uint8_t));
 	}
 
 	ifs.close();
