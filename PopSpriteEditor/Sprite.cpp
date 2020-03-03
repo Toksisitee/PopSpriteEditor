@@ -96,12 +96,16 @@ void CSprite::MapSprite(uint16_t index)
 				if (b == 0)
 				{
 					SprBank.Data[index].Raw.push_back({ static_cast<uint8_t>(b), REND });
+					for (; x < SprBank.Data[index].Sprite.Width; x++)
+						SprBank.Data[index].Map[x][y] = Palette::ColorKeys[0];
 					break;
 				}
 
 				if (b < 0)
 				{
 					SprBank.Data[index].Raw.push_back({ static_cast<uint8_t>(b), RSKIP });
+					for (uint32_t i = 0; i <= (-b); i++)
+						SprBank.Data[index].Map[x + i][y] = Palette::ColorKeys[0];
 					x += -b;
 				}
 				else if (b > 0)
