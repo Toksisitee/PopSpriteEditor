@@ -47,7 +47,7 @@ int main(array<System::String^> ^args)
 	freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
 	freopen_s((FILE**)stdin, "CONIN$", "r", stdin);
 	freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);
-	printf("PopSpriteEditor\n");
+	printf("PopSpriteEditor - %s @ %s.\n", EDITOR_VERSION, EDITOR_DATE);
 
 	std::string palettePath = GetCurrentDir() + "pal.dat";
 	if (!Palette::Load(palettePath))
