@@ -112,7 +112,9 @@ void CSprite::MapSprite(uint16_t index)
 				{
 					SprBank.Data[index].Raw.push_back({ static_cast<uint8_t>(b), RSKIP });
 					for (uint32_t i = 0; i <= (-b); i++)
-						SprBank.Data[index].Map[x + i][y] = Palette::ColorKeys[0];
+						if ((x + i) < SprBank.Data[index].Sprite.Width)
+							SprBank.Data[index].Map[x + i][y] = Palette::ColorKeys[0];
+
 					x += -b;
 				}
 				else if (b > 0)
@@ -230,16 +232,14 @@ void CSprite::DumpMemoryToBank(std::string& path)
 
 void CSprite::ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t index, uint32_t maxIndex)
 {
-	uint8_t bs = 0
+	int32_t bs = 0
 		, br = 0,
 		pal_idx;
-	uint16_t sprw
+	int32_t sprw
 		, sprh
-		, px = 0
-		, br_idx;
+		, px = 0;
 	RGBApixel rgb;
 	std::vector<uint8_t> pal;
-	bool bClrs = false;
 	sprw = sprbmp.TellWidth();
 	sprh = sprbmp.TellHeight();
 
@@ -258,54 +258,80 @@ void CSprite::ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t
 		}
 	}
 
-	for (const auto& idx : pal)
+	auto wbr = [&]()
 	{
-		if (Palette::IndexIsColorKey(idx))
+		while (br)
 		{
-			bs++;
-
-			if (bClrs)
+			if (br > 127)
 			{
-				bClrs = false;
-				vec[br_idx - 1] = br;
+				vec.push_back(127);
+
+				for (uint32_t j = 0; j < 127; j++)
+					vec.push_back(pal[px - br + j]);
+
+				br -= 127;
+			}
+			else
+			{
+				vec.push_back(br);
+
+				for (uint32_t j = 0; j < br; j++)
+					vec.push_back(pal[px - br + j]);
+
 				br = 0;
 			}
 		}
-		else
+	};
+
+	auto wbs = [&]()
+	{
+		while (bs)
 		{
-			if (bs)
+			if (bs > 127)
+			{
+				vec.push_back(-127);
+				bs -= 127;
+			}
+			else
 			{
 				vec.push_back((-bs));
 				bs = 0;
 			}
-
-			br++;
-
-			if (!bClrs)
-			{
-				bClrs = true;
-				vec.push_back(br);
-				br_idx = vec.size();
-			}
-
-			vec.push_back(idx);
 		}
+	};
 
-		px++;
-
-		if (px == sprw)
+	for (uint32_t y = 0; y < sprh; y++)
+	{
+		for (uint32_t x = 0; x < sprw; x++)
 		{
-			vec.push_back(0);
-			px = 0;
-			bs = 0;
+			auto idx = pal[px];
 
-			if (bClrs)
+			if (Palette::IndexIsColorKey(idx))
 			{
-				bClrs = false;
-				vec[br_idx - 1] = br;
-				br = 0;
+				if (br)
+					wbr();
+
+				bs++;
 			}
+			else
+			{
+				if (bs)
+					wbs();
+
+				br++;
+			}
+
+			px++;
 		}
+
+		//if (bs)
+		//	wbs();
+		bs = 0;
+
+		if (br)
+			wbr();
+
+		vec.push_back(0);
 	}
 }
 

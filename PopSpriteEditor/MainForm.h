@@ -98,6 +98,7 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::ToolStripMenuItem^  exportToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  createToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  fullColorPaletteToolStripMenuItem;
 
 
 
@@ -146,6 +147,7 @@ namespace PopSpriteEditor {
 			this->toolStripTextBox1 = (gcnew System::Windows::Forms::ToolStripTextBox());
 			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->debugDataToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->fullColorPaletteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ctrlGroupBoxSelect = (gcnew System::Windows::Forms::GroupBox());
 			this->ctrlBtnColorPick = (gcnew System::Windows::Forms::Button());
@@ -316,7 +318,10 @@ namespace PopSpriteEditor {
 			// 
 			// aboutToolStripMenuItem
 			// 
-			this->aboutToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->debugDataToolStripMenuItem });
+			this->aboutToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->debugDataToolStripMenuItem,
+					this->fullColorPaletteToolStripMenuItem
+			});
 			this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
 			this->aboutToolStripMenuItem->Size = System::Drawing::Size(61, 20);
 			this->aboutToolStripMenuItem->Text = L"Options";
@@ -325,9 +330,17 @@ namespace PopSpriteEditor {
 			// 
 			this->debugDataToolStripMenuItem->CheckOnClick = true;
 			this->debugDataToolStripMenuItem->Name = L"debugDataToolStripMenuItem";
-			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(109, 22);
+			this->debugDataToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->debugDataToolStripMenuItem->Text = L"Debug";
 			this->debugDataToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::debugDataToolStripMenuItem_CheckedChanged);
+			// 
+			// fullColorPaletteToolStripMenuItem
+			// 
+			this->fullColorPaletteToolStripMenuItem->CheckOnClick = true;
+			this->fullColorPaletteToolStripMenuItem->Name = L"fullColorPaletteToolStripMenuItem";
+			this->fullColorPaletteToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->fullColorPaletteToolStripMenuItem->Text = L"Full color palette";
+			this->fullColorPaletteToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::fullColorPaletteToolStripMenuItem_CheckedChanged);
 			// 
 			// aboutToolStripMenuItem1
 			// 
@@ -670,6 +683,7 @@ private: System::Void exportToolStripMenuItem_Click(System::Object^  sender, Sys
 private: System::Void saveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void createToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void dumpSpritesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void fullColorPaletteToolStripMenuItem_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 };
 
 	ref class GlobalForms abstract sealed

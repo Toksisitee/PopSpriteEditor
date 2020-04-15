@@ -24,6 +24,7 @@
 RGB g_Palette[256];
 uint8_t g_AlphaTable[256 * 256];
 uint8_t Palette::ColorKeys[2] = { 255, 255 };
+bool Palette::AllColors = false;
 
 void Palette::Save(RGB* palette)
 {
@@ -113,6 +114,9 @@ uint8_t Palette::FindClosestColor(RGB rgb)
 
 uint8_t Palette::FindColor(RGB rgb, bool closest)
 {
+	if (Palette::AllColors)
+		return Palette::FindColorAll(rgb, true);
+
 	if (rgb.R == g_Palette[0].R &&
 		rgb.G == g_Palette[0].G &&
 		rgb.B == g_Palette[0].B)

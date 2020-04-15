@@ -11,6 +11,7 @@ namespace Palette
 	extern uint8_t FindColorAll(RGB rgb, bool closest = false);
 	extern bool IndexIsColorKey(uint8_t index);
 	extern uint8_t ColorKeys[2];
+	extern bool AllColors;
 }
 
 extern RGB g_Palette[256];

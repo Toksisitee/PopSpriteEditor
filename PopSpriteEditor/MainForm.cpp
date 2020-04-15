@@ -501,6 +501,11 @@ inline System::Void PopSpriteEditor::MainForm::dumpSpritesToolStripMenuItem_Clic
 	g_Sprite.ExportSprites();
 }
 
+inline System::Void PopSpriteEditor::MainForm::fullColorPaletteToolStripMenuItem_CheckedChanged(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	Palette::AllColors = fullColorPaletteToolStripMenuItem->Checked;
+}
+
 inline System::Void PopSpriteEditor::MainForm::ctrlPaletteImg_MouseMove(System::Object ^ sender, System::Windows::Forms::MouseEventArgs ^ e) 
 {
 	if (static_cast<System::Drawing::Bitmap^>(g_BitmapPalette) != nullptr)
