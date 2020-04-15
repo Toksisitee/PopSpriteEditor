@@ -99,6 +99,8 @@ namespace PopSpriteEditor {
 	private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  createToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  fullColorPaletteToolStripMenuItem;
+	private: System::Windows::Forms::FlowLayoutPanel^  flowLayoutPanel1;
+
 
 
 
@@ -173,6 +175,7 @@ namespace PopSpriteEditor {
 			this->CopyOffset = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ctrlTooltipContext = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->copyRGBToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->menuStrip1->SuspendLayout();
 			this->ctrlGroupBoxSelect->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlPaintColor2))->BeginInit();
@@ -186,6 +189,7 @@ namespace PopSpriteEditor {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlPaletteImg))->BeginInit();
 			this->ctrlListSpritesContext->SuspendLayout();
 			this->ctrlTooltipContext->SuspendLayout();
+			this->flowLayoutPanel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// ctrlListSprites
@@ -542,23 +546,23 @@ namespace PopSpriteEditor {
 			// 
 			// groupBox1
 			// 
-			this->groupBox1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+			this->groupBox1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->groupBox1->AutoSize = true;
-			this->groupBox1->Controls->Add(this->ctrlSpriteImg2);
+			this->groupBox1->Controls->Add(this->flowLayoutPanel1);
 			this->groupBox1->Location = System::Drawing::Point(587, 27);
 			this->groupBox1->Name = L"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(296, 431);
+			this->groupBox1->Size = System::Drawing::Size(296, 352);
 			this->groupBox1->TabIndex = 7;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"Editor";
 			// 
 			// ctrlSpriteImg2
 			// 
-			this->ctrlSpriteImg2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->ctrlSpriteImg2->Location = System::Drawing::Point(6, 19);
+			this->ctrlSpriteImg2->Location = System::Drawing::Point(3, 3);
 			this->ctrlSpriteImg2->Name = L"ctrlSpriteImg2";
-			this->ctrlSpriteImg2->Size = System::Drawing::Size(284, 393);
+			this->ctrlSpriteImg2->Size = System::Drawing::Size(284, 327);
 			this->ctrlSpriteImg2->TabIndex = 0;
 			this->ctrlSpriteImg2->TabStop = false;
 			this->ctrlSpriteImg2->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::ctrlSpriteImg2_Paint);
@@ -567,11 +571,12 @@ namespace PopSpriteEditor {
 			// 
 			// groupBox2
 			// 
-			this->groupBox2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
+			this->groupBox2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
 			this->groupBox2->Controls->Add(this->ctrlPaletteImg);
-			this->groupBox2->Location = System::Drawing::Point(587, 477);
+			this->groupBox2->Location = System::Drawing::Point(587, 385);
 			this->groupBox2->Name = L"groupBox2";
-			this->groupBox2->Size = System::Drawing::Size(290, 184);
+			this->groupBox2->Size = System::Drawing::Size(290, 276);
 			this->groupBox2->TabIndex = 8;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = L"Palette";
@@ -582,7 +587,7 @@ namespace PopSpriteEditor {
 				| System::Windows::Forms::AnchorStyles::Left));
 			this->ctrlPaletteImg->Location = System::Drawing::Point(6, 19);
 			this->ctrlPaletteImg->Name = L"ctrlPaletteImg";
-			this->ctrlPaletteImg->Size = System::Drawing::Size(284, 159);
+			this->ctrlPaletteImg->Size = System::Drawing::Size(284, 251);
 			this->ctrlPaletteImg->TabIndex = 6;
 			this->ctrlPaletteImg->TabStop = false;
 			this->ctrlPaletteImg->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::ctrlPaletteImg_Paint);
@@ -614,6 +619,16 @@ namespace PopSpriteEditor {
 			this->copyRGBToolStripMenuItem->Size = System::Drawing::Size(127, 22);
 			this->copyRGBToolStripMenuItem->Text = L"Copy RGB";
 			this->copyRGBToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::copyRGBToolStripMenuItem_Click);
+			// 
+			// flowLayoutPanel1
+			// 
+			this->flowLayoutPanel1->AutoScroll = true;
+			this->flowLayoutPanel1->Controls->Add(this->ctrlSpriteImg2);
+			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->flowLayoutPanel1->Location = System::Drawing::Point(3, 16);
+			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
+			this->flowLayoutPanel1->Size = System::Drawing::Size(290, 333);
+			this->flowLayoutPanel1->TabIndex = 0;
 			// 
 			// MainForm
 			// 
@@ -647,6 +662,7 @@ namespace PopSpriteEditor {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ctrlPaletteImg))->EndInit();
 			this->ctrlListSpritesContext->ResumeLayout(false);
 			this->ctrlTooltipContext->ResumeLayout(false);
+			this->flowLayoutPanel1->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
