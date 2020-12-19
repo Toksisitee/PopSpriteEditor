@@ -497,7 +497,7 @@ int32_t CSprite::findSection(const int32_t& offset, BMP& sheet)
 	return height;
 }
 
-bool CSprite::SheetExtract(const std::string& filePath, const std::string& outputPath, bool rekey, uint32_t startIndex)
+bool CSprite::SheetExtract(const std::string& filePath, const std::string& outputPath, bool rekey, uint32_t startIndex, bool extractBetweenRange, uint32_t extractRange1, uint32_t extractRange2, bool extractFromIndex, uint32_t extractFromIdx)
 {
 	BMP sheet;
 	RGBApixel rgb;
@@ -505,7 +505,9 @@ bool CSprite::SheetExtract(const std::string& filePath, const std::string& outpu
 		, psy = 0
 		, shw, shy
 		, sprw, sprh
-		, count = startIndex;
+		, count = startIndex // sprite name start index
+		, idx = 0 // true idx of sprite
+		, spr_extracted = 0; // num of sprites extracted
 	Vector2 vL, vR;
 	bool column_empty;
 
@@ -514,6 +516,34 @@ bool CSprite::SheetExtract(const std::string& filePath, const std::string& outpu
 		memset(&vR, 0, sizeof(Vector2));
 		sprw = 0;
 		sprh = 0;
+	};
+
+	auto save_sprite = [&]() {
+		BMP spr;
+		spr.SetBitDepth(24);
+		spr.SetSize(sprw, sprh);
+
+		for (uint32_t i = 0; i < sprw; i++)
+		{
+			for (uint32_t j = 0; j < sprh; j++)
+			{
+				rgb = sheet.GetPixel(vL.x + i, vR.y + j);
+
+				if (rekey && IsPixelEmpty(rgb))
+				{
+					rgb.Red = 255;
+					rgb.Green = 0;
+					rgb.Blue = 255;
+				}
+
+				spr.SetPixel(i, j, rgb);
+			}
+		}
+		
+		spr.WriteToFile((outputPath + "//" + std::to_string(count) + ".bmp").c_str());
+		reset();
+		count++;
+		spr_extracted++;
 	};
 
 	if (sheet.ReadFromFile(filePath.c_str()))
@@ -556,29 +586,23 @@ bool CSprite::SheetExtract(const std::string& filePath, const std::string& outpu
 				sprh = vL.y - vR.y;
 				sprh += 1;
 
-				BMP spr;
-				spr.SetBitDepth(24);
-				spr.SetSize(sprw, sprh);
-			
-				for (uint32_t i = 0; i < sprw; i++)
+				if (extractBetweenRange)
 				{
-					for (uint32_t j = 0; j < sprh; j++)
-					{ 
-						rgb = sheet.GetPixel(vL.x + i, vR.y + j);
-
-						if (rekey && IsPixelEmpty(rgb))
-						{
-							rgb.Red = 255;
-							rgb.Green = 0;
-							rgb.Blue = 255;
-						}
-							
-						spr.SetPixel(i, j, rgb);
+					if (idx >= extractRange1 && idx <= extractRange2) {
+						save_sprite();
 					}
 				}
+				else if (extractFromIndex)
+				{
+					if (idx >= extractFromIdx) {
+						save_sprite();
+					}
+				}
+				else {
+					save_sprite();
+				}
 
-				spr.WriteToFile((outputPath + "//" + std::to_string(count) + ".bmp").c_str());
-				count++;
+				idx++;
 				reset();
 			}
 
@@ -593,7 +617,7 @@ bool CSprite::SheetExtract(const std::string& filePath, const std::string& outpu
 			}
 		}
 
-		printf("Finished parsing sprite sheet. Found %i sprites\n", count);
+		printf("Finished parsing sprite sheet. Found %i sprites. Extracted: %i\n", idx, spr_extracted);
 		return true;
 	}
 

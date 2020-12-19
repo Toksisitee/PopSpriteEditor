@@ -57,7 +57,7 @@ public:
 	void ImportToBank(std::string& path);
 	void ConvertBitmapToData(BMP sprbmp, std::vector<uint8_t>& vec, int32_t index, uint32_t maxIndex);
 	System::Drawing::Bitmap^ getSpriteBitmapHandle(uint16_t index);
-	bool SheetExtract(const std::string& filePath, const std::string& outputPath, bool rekey, uint32_t startIndex);
+	bool SheetExtract(const std::string& filePath, const std::string& outputPath, bool rekey, uint32_t startIndex, bool extractBetweenRange, uint32_t extractRange1, uint32_t extractRange2, bool extractFromIndex, uint32_t extractFromIdx);
 	void SheetCreate(const std::string& filePath, const std::string& sourcePath);
 	void Clear() { delete[] m_pBuffer; SprBank.Data.clear(); m_IsHFX = false; }
 	void SetHFX(bool b) { m_IsHFX = b; };

@@ -78,7 +78,13 @@ inline System::Void PopSpriteEditor::SheetForm::ctrlSheetExtract_Click(System::O
 		g_Sprite.SheetExtract(context.marshal_as<std::string>(dialog->FileName), 
 			context.marshal_as<std::string>(sourcePath), 
 			static_cast<bool>(ctrlRekey->SelectedIndex),
-			static_cast<uint32_t>(ctrlStartIndex->Value));
+			static_cast<uint32_t>(ctrlStartIndex->Value),
+			chbExtractBetweenRange->Checked,
+			static_cast<uint32_t>(ctrlExtractBetweenRange1->Value), 
+			static_cast<uint32_t>(ctrlExtractBetweenRange2->Value),
+			chbExtractFromIndex->Checked,
+			static_cast<uint32_t>(ctrlExtractFromIndex->Value)
+		);
 	}
 }
 
@@ -86,3 +92,32 @@ inline System::Void PopSpriteEditor::SheetForm::ctrlOpenFolder_Click(System::Obj
 {
 	System::Diagnostics::Process::Start(Directory::GetCurrentDirectory());
 }
+
+inline System::Void PopSpriteEditor::SheetForm::chbExtractBetweenRange_CheckedChanged(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	if (chbExtractBetweenRange->Checked)
+	{
+		chbExtractFromIndex->Checked = false;
+		ctrlExtractBetweenRange1->Enabled = true;
+		ctrlExtractBetweenRange2->Enabled = true;
+	}
+	else
+	{
+		ctrlExtractBetweenRange1->Enabled = false;
+		ctrlExtractBetweenRange2->Enabled = false;
+	}
+}
+
+inline System::Void PopSpriteEditor::SheetForm::chbExtractFromIndex_CheckedChanged(System::Object ^ sender, System::EventArgs ^ e) 
+{
+	if (chbExtractFromIndex->Checked)
+	{
+		chbExtractBetweenRange->Checked = false;
+		ctrlExtractFromIndex->Enabled = true;
+	}
+	else
+	{
+		ctrlExtractFromIndex->Enabled = false;
+	}
+}
+
