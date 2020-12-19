@@ -703,8 +703,8 @@ void CSprite::SheetCreate(const std::string& filePath, const std::string& source
 			i--;
 		}
 
-		if ((sprh + cy + PAD_Y) > shy)
-			shy = sprh + cy + PAD_Y + 1;
+		if ((sprh + cy + PAD_Y) >= shy)
+			shy = (sprh * 2) + cy + PAD_Y + 1;
 	}
 
 	printf("Creating sprite sheet (%i sprites) with a size of %ix%i\n", sprs, shw, shy);
