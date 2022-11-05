@@ -1,7 +1,7 @@
 <img align="left" width="100" height="100" src="https://i.imgur.com/IlTprgN.png">  
 
 # PopSpriteEditor
-Open source Sprite Viewer &amp; Editor tool written in C++/CLI for the game **Populous: The Beginning**.
+Open source Sprite Viewer &amp; Editor tool written in C++/CLI for Bullfrog's **Populous: The Beginning** game.
 
 <p align="center">
  <img width="800" height="600" src="https://i.imgur.com/XMEdjnT.png"></img>
